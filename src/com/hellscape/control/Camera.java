@@ -7,14 +7,14 @@ import com.hellscape.map.Map;
 import com.hellscape.map.Tile;
 
 public class Camera implements KeyListener {
-
+    
     private Map map;
     private int width;
     private int height;
     private int speed;
 
-    private int posX;
-    private int posY;
+    private int camX;
+    private int camY;
     private int velX;
     private int velY;
 
@@ -27,13 +27,13 @@ public class Camera implements KeyListener {
         this.width = width;
         this.height = height;
         this.speed = speed;
+
+        this.map = new Map();
         
-        this.posX = this.width/2;
-        this.posY = this.height/2;
+        this.camX = map.getStartX();
+        this.camY = map.getStartY();
         this.velX = 0;
         this.velY = 0;
-
-        this.map = new Map(this.posX - this.width/2, this.posY - this.height/2);
 
         this.isMovingUp = false;
         this.isMovingDown = false;
@@ -42,26 +42,24 @@ public class Camera implements KeyListener {
     }
 
     public void update() {
-        int newX = this.posX + this.velX;
-        int newY = this.posY + this.velY;
+        boolean collideX = map.collide(this.camX+(this.width-Tile.SIZE)/2+this.velX, this.camY+(this.height-Tile.SIZE)/2, Tile.SIZE-1, Tile.SIZE-1);
+        boolean collideY = map.collide(this.camX+(this.width-Tile.SIZE)/2, this.camY+(this.height-Tile.SIZE)/2+this.velY, Tile.SIZE-1, Tile.SIZE-1);
+        boolean collide = map.collide(this.camX+(this.width-Tile.SIZE)/2+this.velX, this.camY+(this.height-Tile.SIZE)/2+this.velY, Tile.SIZE-1, Tile.SIZE-1);
 
-        if ((newX >= this.width / 2) && (Math.abs(newX - Map.MAX_X) >= this.width / 2)) {
-            this.posX += this.velX;
-            this.map.updatePos(-this.velX, 0);
-        }
-        if ((newY >= this.height / 2) && (Math.abs(newY - Map.MAX_X) >= this.height / 2)) {
-            this.posY += this.velY;
-            this.map.updatePos(0, -this.velY);
-        }
+        map.update(this);
+        if (!collideX || !collide) this.camX += this.velX;
+        if (!collideY || !collide) this.camY += this.velY;
     }
 
-    public void render(Graphics g) {
+    public void render(Graphics2D g) {
+        g.translate(-camX, -camY);
         this.map.draw(g);
+        g.translate(camX, camY);
         g.setColor(Color.RED);
-        g.drawRect((this.width - Tile.SIZE)/2, (this.height - Tile.SIZE)/2, Tile.SIZE, Tile.SIZE);
-        g.drawString("X: " + this.posX + " Y: " + this.posY, 10, 20);
+        g.drawRect((this.width - Tile.SIZE)/2, (this.height - Tile.SIZE)/2, Tile.SIZE-1, Tile.SIZE-1);
+        g.drawString("X: " + this.camX + " Y: " + this.camY, 10, 20);
     }
-    
+
     @Override
     public void keyPressed(KeyEvent e) {
         char key = e.getKeyChar();
@@ -122,4 +120,19 @@ public class Camera implements KeyListener {
     public void keyTyped(KeyEvent e) {
     }
 
+    public int getCamX() {
+        return this.camX;
+    }
+
+    public int getCamY() {
+        return this.camY;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
 }

@@ -56,7 +56,7 @@ public class CameraPanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        this.camera.render(g);
+        Graphics2D g2d = (Graphics2D)g;
+        camera.render(g2d);
     }
-
 }
