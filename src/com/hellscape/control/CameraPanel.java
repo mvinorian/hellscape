@@ -25,22 +25,11 @@ public class CameraPanel extends JPanel {
     }
 
     public void startThread() {
-        Thread updateThread = new Thread() {
+        Thread gameThread = new Thread() {
             @Override
             public void run() {
                 while(true) {
                     camera.update();
-
-                    try {
-                        Thread.sleep(1000 / CameraPanel.REFRESH_RATE);
-                    } catch (InterruptedException e) {}
-                }
-            }
-        };
-        Thread renderThread = new Thread() {
-            @Override
-            public void run() {
-                while(true) {
                     repaint();
 
                     try {
@@ -49,8 +38,7 @@ public class CameraPanel extends JPanel {
                 }
             }
         };
-        updateThread.start();
-        renderThread.start();
+        gameThread.start();
     }
 
     @Override
