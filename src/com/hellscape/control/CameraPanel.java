@@ -19,7 +19,7 @@ public class CameraPanel extends JPanel {
         this.height = height;
 
         this.setPreferredSize(new Dimension(this.width, this.height));
-        this.addKeyListener(this.camera);
+        this.addKeyListener(this.camera.getPlayer());
         this.setFocusable(true);
         this.startThread();
     }
