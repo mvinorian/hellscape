@@ -34,7 +34,7 @@ public class Tile {
             g.setColor(this.color);
             g.fillRect(this.posX, this.posY, Tile.SIZE, Tile.SIZE);
             g.setColor(Color.BLUE);
-            g.drawString("X: " + this.posX + " Y: " + this.posY, this.posX, this.posY+10);
+            g.drawString("X: " + this.posX + " Y: " + this.posY, this.posX+10, this.posY+20);
         }
     }
 

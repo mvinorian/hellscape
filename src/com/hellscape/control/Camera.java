@@ -23,8 +23,8 @@ public class Camera {
 
         this.map = new Map();
         
-        this.camX = map.getStartX()-(this.width+Tile.SIZE)/2;
-        this.camY = map.getStartY()-(this.height+Tile.SIZE)/2;
+        this.camX = map.getStartX()-(this.width-Tile.SIZE)/2;
+        this.camY = map.getStartY()-(this.height-Tile.SIZE)/2;
 
         this.player = new Player(this.camX+(this.width-Tile.SIZE)/2, this.camY+(this.height-Tile.SIZE)/2, speed);
     }
