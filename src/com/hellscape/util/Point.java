@@ -33,4 +33,22 @@ public class Point {
         this.x *= rX;
         this.y *= rY;
     }
+    
+    public double getDistance(Point p) {
+        double dX = (double)(this.x-p.x);
+        double dY = (double)(this.y-p.y);
+        
+        return Math.sqrt(dX*dX + dY*dY);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Point p = (Point)(obj);
+        return this.x == p.x && this.y == p.y;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Point(%d, %d)", this.x, this.y);
+    }
 }
