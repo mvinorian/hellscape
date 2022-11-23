@@ -37,17 +37,11 @@ public class Player implements KeyListener {
     }
 
     public void update(Camera camera) {
-        Box boxX = new Box(box);
-        Box boxY = new Box(box);
-        Box boxXY = new Box(box);
-        boxX.translate(this.velX, 0);
-        boxY.translate(0, this.velY);
-        boxXY.translate(this.velX, this.velY);
-
-        boolean isCollide = camera.getMap().isCollide(boxXY);
-
-        if (camera.getMap().isCollide(boxX) == false || !isCollide) this.box.translate(this.velX, 0);
-        if (camera.getMap().isCollide(boxY) == false || !isCollide) this.box.translate(0, this.velY);
+        this.box.translate(this.velX, 0);
+        if (camera.getMap().isCollide(this.box)) this.box.translate(-this.velX, 0);
+        
+        this.box.translate(0, this.velY);
+        if (camera.getMap().isCollide(this.box)) this.box.translate(0, -this.velY);
     }
 
     public void draw(Graphics2D g) {
