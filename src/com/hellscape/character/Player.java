@@ -1,15 +1,18 @@
 package com.hellscape.character;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import com.hellscape.control.Camera;
-import com.hellscape.map.Tile;
+import com.hellscape.util.*;
 
 public class Player implements KeyListener {
+
+    public static final int SIZE = 160;
     
-    private int posX;
-    private int posY;
+    private Box box;
     private int speed;
 
     private int velX;
@@ -20,9 +23,8 @@ public class Player implements KeyListener {
     private boolean isMovingLeft;
     private boolean isMovingRight;
 
-    public Player(int posX, int posY, int speed) {
-        this.posX = posX;
-        this.posY = posY;
+    public Player(Point pos, int speed) {
+        this.box = new Box(pos, SIZE, SIZE);
         this.speed = speed;
 
         this.velX = 0;
@@ -35,18 +37,17 @@ public class Player implements KeyListener {
     }
 
     public void update(Camera camera) {
-        boolean collideX = camera.getMap().collide(this.posX+this.velX, this.posY, Tile.SIZE-1, Tile.SIZE-1);
-        boolean collideY = camera.getMap().collide(this.posX, this.posY+this.velY, Tile.SIZE-1, Tile.SIZE-1);
-        boolean collide = camera.getMap().collide(this.posX+this.velX, this.posY+this.velY, Tile.SIZE-1, Tile.SIZE-1);
-
-        if (!collideX || !collide) this.posX += this.velX;
-        if (!collideY || !collide) this.posY += this.velY;
+        this.box.translate(this.velX, 0);
+        if (camera.getMap().isCollide(this.box)) this.box.translate(-this.velX, 0);
+        
+        this.box.translate(0, this.velY);
+        if (camera.getMap().isCollide(this.box)) this.box.translate(0, -this.velY);
     }
 
     public void draw(Graphics2D g) {
         g.setColor(Color.RED);
-        g.drawRect(this.posX, this.posY, Tile.SIZE-1, Tile.SIZE-1);
-        g.drawString("X: " + this.posX + " Y: " + this.posY, this.posX+10, this.posY+20);
+        g.drawRect(this.box.getX(), this.box.getY(), this.box.getWidth(), this.box.getHeight());
+        g.drawString("X: " + this.box.getX() + " Y: " + this.box.getY(), this.box.getX()+10, this.box.getY()+20);
     }
 
     @Override
@@ -109,11 +110,15 @@ public class Player implements KeyListener {
     public void keyTyped(KeyEvent e) {
     }
 
+    public Point getPos() {
+        return this.box.getPoint();
+    }
+
     public int getPosX() {
-        return this.posX;
+        return this.box.getX();
     }
 
     public int getPosY() {
-        return this.posY;
+        return this.box.getY();
     }
 }
