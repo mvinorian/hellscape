@@ -30,10 +30,7 @@ public class Tile {
     }
 
     public void update(Camera camera) {
-        Point rel = new Point(this.box.getPoint());
-        rel.translate(-camera.getCamX(), -camera.getCamY());
-        this.onCamera = -Tile.SIZE <= rel.x && rel.x <= camera.getWidth() &&
-                        -Tile.SIZE <= rel.y && rel.y <= camera.getHeight();
+        this.onCamera = camera.getCamBox().isCollide(this.box);
     }
 
     public void draw(Graphics2D g) {
