@@ -24,6 +24,10 @@ public class Line {
         this.q.translate(dX, dY);
     }
 
+    public double getLength() {
+        return this.p.getDistance(q);
+    }
+
     public Point getPointP() {
         return this.p;
     }
