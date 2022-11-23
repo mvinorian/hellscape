@@ -5,8 +5,14 @@ public class Box {
     private Point pos;
     private int width, height;
 
+    public Box(Box box) {
+        this.pos = new Point(box.getPoint());
+        this.width = box.getWidth();
+        this.height = box.getHeight();
+    }
+
     public Box(Point pos, int width, int height) {
-        this.pos = pos;
+        this.pos = new Point(pos);
         this.width = width;
         this.height = height;
     }
@@ -15,6 +21,14 @@ public class Box {
         this.pos = new Point(x, y);
         this.width = width;
         this.height = height;
+    }
+
+    public void move(Point p) {
+        this.pos.move(p);
+    }
+
+    public void move(int x, int y) {
+        this.pos.move(x, y);
     }
 
     public void translate(int dX, int dY) {
