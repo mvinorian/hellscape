@@ -44,7 +44,7 @@ public class CameraPanel extends JPanel {
                     repaint();
 
                     try {
-                        Thread.sleep(1000 / CameraPanel.REFRESH_RATE);
+                        Thread.sleep(1000 / REFRESH_RATE);
                     } catch (InterruptedException e) {}
                 }
             }
