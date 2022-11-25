@@ -1,6 +1,9 @@
 package com.hellscape.control;
 
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+
 import javax.swing.JPanel;
 
 public class CameraPanel extends JPanel {
@@ -20,6 +23,14 @@ public class CameraPanel extends JPanel {
 
         this.setPreferredSize(new Dimension(this.width, this.height));
         this.addKeyListener(this.camera.getPlayer());
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                Dimension dim = e.getComponent().getSize();
+                camera.resize(dim.width, dim.height);
+            }
+        });
         this.setFocusable(true);
         this.startThread();
     }
@@ -33,7 +44,7 @@ public class CameraPanel extends JPanel {
                     repaint();
 
                     try {
-                        Thread.sleep(1000 / CameraPanel.REFRESH_RATE);
+                        Thread.sleep(1000 / REFRESH_RATE);
                     } catch (InterruptedException e) {}
                 }
             }

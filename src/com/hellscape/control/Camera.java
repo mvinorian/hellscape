@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 
 import com.hellscape.character.Player;
 import com.hellscape.map.Map;
-import com.hellscape.map.Tile;
 import com.hellscape.util.*;
 
 public class Camera {
@@ -17,10 +16,10 @@ public class Camera {
     public Camera(int width, int height, int speed) {
         this.map = new Map();
 
-        this.box = new Box(map.getStart(), width, height);
-        this.box.translate(-(width-Tile.SIZE)/2, -(height-Tile.SIZE)/2);
-
         this.player = new Player(map.getStart(), speed);
+
+        this.box = new Box(this.player.getPos(), width, height);
+        this.box.translate((Player.SIZE-this.box.getWidth())/2, (Player.SIZE-this.box.getHeight())/2);
     }
 
     public void update() {
@@ -36,6 +35,11 @@ public class Camera {
         this.player.draw(g);
         g.translate(this.box.getX(), this.box.getY());
         g.drawString("X: " + this.box.getX() + " Y: " + this.box.getY(), 10, 20);
+    }
+
+    public void resize(int width, int height) {
+        this.box.resize(width, height);
+        this.update();
     }
 
     public Box getCamBox() {

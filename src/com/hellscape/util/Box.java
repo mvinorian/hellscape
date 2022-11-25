@@ -35,6 +35,11 @@ public class Box {
         this.pos.translate(dX, dY);
     }
 
+    public void resize(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
     public boolean isCollide(Box box) {
         return (this.pos.x < box.getX() + box.getWidth() &&
                 this.pos.y < box.getY() + box.getHeight() &&
