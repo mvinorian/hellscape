@@ -1,30 +1,26 @@
 package com.hellscape.map;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 
+import com.hellscape.asset.Tileset;
 import com.hellscape.control.Camera;
 import com.hellscape.util.*;
 
 public class Tile {
     
-    public static final int SIZE = 160;
+    public static final int TILE_SIZE = 160;
+    public static final int SPRITE_SIZE = 32;
 
     private Box box;
-    private Color color;
     private boolean onCamera;
     private boolean isPassable;
+    private Box spriteBox;
 
-    public Tile(Point pos, Color color, boolean isPassable) {
-        this.box = new Box(pos, SIZE, SIZE);
-        this.color = color;
-        this.onCamera = false;
-        this.isPassable = isPassable;
-    }
-
-    public Tile (int posX, int posY, Color color, boolean isPassable) {
-        this.box = new Box(posX, posY, SIZE, SIZE);
-        this.color = color;
+    public Tile(Point tilePos, Point spritePos, boolean isPassable) {
+        tilePos.scale(TILE_SIZE, TILE_SIZE);
+        spritePos.scale(SPRITE_SIZE, SPRITE_SIZE);
+        this.box = new Box(tilePos, TILE_SIZE, TILE_SIZE);
+        this.spriteBox = new Box(spritePos, 32, 32);
         this.onCamera = false;
         this.isPassable = isPassable;
     }
@@ -34,12 +30,10 @@ public class Tile {
     }
 
     public void draw(Graphics2D g) {
-        if (this.onCamera) {
-            g.setColor(this.color);
-            g.fillRect(this.box.getX(), this.box.getY(), this.box.getWidth(), this.box.getHeight());
-            g.setColor(Color.BLUE);
-            g.drawString("X: " + this.box.getX() + " Y: " + this.box.getY(), this.box.getX()+10, this.box.getY()+20);
-        }
+        if (this.onCamera == false) return;
+        Tileset.draw(g, this.box, this.spriteBox);
+        // g.setColor(Color.RED);
+        // g.drawString("X: " + this.box.getX() + " Y: " + this.box.getY(), this.box.getX()+10, this.box.getY()+20);
     }
 
     public boolean isCollide(Box box) {

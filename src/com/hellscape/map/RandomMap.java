@@ -26,22 +26,24 @@ public class RandomMap {
     public int[][] generate(int roomSize, int totalRoom) {
         List<Point> rooms = this.generateRoom(roomSize, totalRoom);
         List<Line> connections = this.generateConnection(rooms);
-
+        
         this.start = new Point(rooms.get(0));
         this.end = new Point(rooms.get(0));
         
-        for (Point room : rooms) this.drawRoom(room, roomSize, roomSize, 1);
-        for (Line connection : connections) this.drawConnection(connection.getPointP(), connection.getPointQ(), 1);
+        this.drawRoom(new Point(this.width/2, this.height/2), this.width, this.height, 1);
+        for (Point room : rooms) this.drawRoom(room, roomSize, roomSize, 0);
+        for (Line connection : connections) this.drawConnection(connection.getPointP(), connection.getPointQ(), 0);
         this.addNoise();
         
         this.start.translate(0, 2);
         this.end.translate(0, -1);
-        this.drawRoom(start, 1, 3, 1);
-        this.drawRoom(end, 1, 3, 1);
+        this.drawRoom(start, 1, 3, 0);
+        this.drawRoom(end, 1, 3, 0);
         
         this.start.translate(0, -1);
-        this.start.scale(Tile.SIZE, Tile.SIZE);
-        this.end.scale(Tile.SIZE, Tile.SIZE);
+        this.start.scale(Tile.TILE_SIZE, Tile.TILE_SIZE);
+        this.end.scale(Tile.TILE_SIZE, Tile.TILE_SIZE);
+        this.paint();
 
         return this.map.clone();
     }
@@ -131,7 +133,7 @@ public class RandomMap {
         for (int i = -height/2; i <= height/2; i++) {
             for (int j = -width/2; j <= width/2; j++) {
                 this.map[i + pos.y][j + pos.x] = value;
-
+                if (value == 1) continue;
                 if ((i + pos.y) > this.start.y) this.start.move(pos.x, i + pos.y);
                 if ((i + pos.y) < this.end.y) this.end.move(pos.x, i + pos.y);
             }
@@ -167,7 +169,7 @@ public class RandomMap {
     }
     
     private void addNoise() {
-        int[][] temp = map.clone();
+        int[][] temp = this.map.clone();
         float[][] kern = {
             {1f/9, 1f/9, 1f/9},
             {1f/9, 1f/9, 1f/9},
@@ -176,11 +178,34 @@ public class RandomMap {
 
         for (int i = 1; i < this.height-1; i++) {
             for (int j = 1; j < this.width-1; j++) {
-                map[i][j] = Math.round(
+                this.map[i][j] = Math.round(
                     temp[i-1][j-1]*kern[0][0]+temp[i-1][j]*kern[0][1]+temp[i-1][j+1]*kern[0][2]+
                     temp[  i][j-1]*kern[1][0]+temp[  i][j]*kern[1][1]+temp[  i][j+1]*kern[1][2]+
                     temp[i+1][j-1]*kern[2][0]+temp[i+1][j]*kern[2][1]+temp[i+1][j+1]*kern[2][2]
                 );
+            }
+        }
+    }
+
+    private void paint() {
+        for (int i = 1; i < this.height-1; i++) {
+            for (int j = 1; j < this.width-1; j++) {
+                int code = (map[i][j] & 1);
+                if ((map[i][j] & 1) == 0) {
+                    code |= (rd.nextInt(0, 16) << 1);
+                    code |= (rd.nextInt(0, 2) << 5);
+                } else {
+                    if ((map[i][j-1] & 1) == 0) code |= (1<<1);
+                    if ((map[i][j+1] & 1) == 0) code |= (1<<2);
+                    if ((map[i-1][j] & 1) == 0) code |= (1<<3);
+                    if ((map[i+1][j] & 1) == 0) code |= (1<<4);
+
+                    if ((map[i+1][j+1] & 1) == 0) code |= (1<<5);
+                    if ((map[i-1][j+1] & 1) == 0) code |= (1<<6);
+                    if ((map[i+1][j-1] & 1) == 0) code |= (1<<7);
+                    if ((map[i-1][j-1] & 1) == 0) code |= (1<<8);
+                }
+                map[i][j] = code;
             }
         }
     }

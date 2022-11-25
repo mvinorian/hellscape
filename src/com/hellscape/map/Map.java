@@ -1,10 +1,10 @@
 package com.hellscape.map;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hellscape.asset.Tileset;
 import com.hellscape.control.Camera;
 import com.hellscape.util.*;
 
@@ -19,20 +19,21 @@ public class Map {
     private List<Tile> tileMap;
 
     public Map() {
+        Tileset.load();
         this.map = new int[HEIGHT][WIDTH];
         this.generate();
         this.tileMap = new ArrayList<Tile>();
 
-        for (int i = 0; i < HEIGHT; i++) {
-            for (int j = 0; j < WIDTH; j++) {
-                if ((map[i][j]) == 0) this.tileMap.add(new Tile(j*Tile.SIZE, i*Tile.SIZE, Color.GRAY, false));
-                else this.tileMap.add(new Tile(j*Tile.SIZE, i*Tile.SIZE, Color.WHITE, true));
-            }
+        for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < WIDTH; j++) {
+            boolean isPassable = (map[i][j] & 1) == 0;
+            this.tileMap.add(
+                new Tile(this.getTilePos(i, j), this.getSpritePos(map[i][j]),
+                isPassable));
         }
 
         for (int i = 0; i < HEIGHT; i++) {
             for (int j = 0; j < WIDTH; j++) {
-                System.out.print(String.format("%c ", this.map[i][j] == 0 ? '0' : ' '));
+                System.out.print(String.format("%d ", this.map[i][j]));
             }
             System.out.println();
         }
@@ -60,6 +61,17 @@ public class Map {
         this.map = rm.generate(roomSize, totalRoom);
         this.start = rm.getStart();
         this.end = rm.getEnd();
+    }
+
+    private Point getTilePos(int i, int j) {
+        return new Point(j, i);
+    }
+
+    private Point getSpritePos(int code) {
+        int col = (code & 31) >> 1;
+        int row = (code >> 5);
+        if ((code & 1) == 0) row += 16;
+        return new Point(col, row);
     }
 
     public Point getStart() {
