@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import com.hellscape.asset.PlayerSprite;
 import com.hellscape.control.Camera;
 import com.hellscape.util.*;
 
@@ -17,13 +18,17 @@ public class Player implements KeyListener {
 
     private int velX;
     private int velY;
+    private static int spriteCount = 0;
+	private static int spriteType = 0;
 
     private boolean isMovingUp;
     private boolean isMovingDown;
     private boolean isMovingLeft;
     private boolean isMovingRight;
+    private static boolean isLastRight = false;
 
     public Player(Point pos, int speed) {
+    	PlayerSprite.load();
         this.box = new Box(pos, SIZE, SIZE);
         this.speed = speed;
 
@@ -45,9 +50,20 @@ public class Player implements KeyListener {
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.RED);
-        g.drawRect(this.box.getX(), this.box.getY(), this.box.getWidth(), this.box.getHeight());
-        g.drawString("X: " + this.box.getX() + " Y: " + this.box.getY(), this.box.getX()+10, this.box.getY()+20);
+        spriteCount++;
+        if(spriteCount ==  30) {
+        	if(spriteType < 3) {
+        		spriteType++;
+        	}
+        	else {
+        		spriteType = 0;
+        	}
+        	spriteCount = 0;
+        }
+        if (!this.isMovingDown && !this.isMovingLeft && !this.isMovingRight && !this.isMovingUp) {
+        	PlayerSprite.drawSpriteIdle(g, this.box, spriteType, isLastRight);
+        }
+        else PlayerSprite.drawSpriteRun(g, this.box, spriteType, isLastRight);
     }
 
     @Override
@@ -65,10 +81,12 @@ public class Player implements KeyListener {
             case 'a':
                 this.velX = -this.speed;
                 this.isMovingLeft = true;
+                isLastRight = false;
                 break;
             case 'd':
                 this.velX = this.speed;
                 this.isMovingRight = true;
+                isLastRight = true;
                 break;
         
             default:
@@ -92,12 +110,18 @@ public class Player implements KeyListener {
                 break;
             case 'a':
                 this.velX = 0;
-                if (this.isMovingRight) this.velX = this.speed;
+                if (this.isMovingRight) {
+                	this.velX = this.speed;
+                	isLastRight = true;
+                }
                 this.isMovingLeft = false;
                 break;
             case 'd':
                 this.velX = 0;
-                if (this.isMovingLeft) this.velX = -this.speed;
+                if (this.isMovingLeft) {
+                	this.velX = -this.speed;
+                	isLastRight = false;
+                }
                 this.isMovingRight = false;
                 break;
         
