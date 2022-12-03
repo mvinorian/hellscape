@@ -4,9 +4,11 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
+import com.hellscape.character.Player;
 import com.hellscape.util.Box;
 
 public class PlayerSprite {
@@ -44,6 +46,7 @@ public class PlayerSprite {
 	}
 	
 	public static void drawSpriteIdle(Graphics2D g, Box dst, int spriteType, boolean mirror) {
+//		if (idle == null) return;
 		switch(spriteType) {
 			case 0:
 				if(mirror) idle = idle4;
@@ -65,6 +68,7 @@ public class PlayerSprite {
     }
 	
 	public static void drawSpriteRun(Graphics2D g, Box dst, int spriteType, boolean mirror) {
+//		if (idle == null) return;
 		switch(spriteType) {
 			case 0:
 				if(mirror) run = run4;
