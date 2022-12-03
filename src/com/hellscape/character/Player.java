@@ -1,6 +1,5 @@
 package com.hellscape.character;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -14,6 +13,7 @@ public class Player implements KeyListener {
     public static final int SIZE = 160;
     
     private Box box;
+    private Box cBox;
     private int speed;
 
     private int velX;
@@ -30,6 +30,9 @@ public class Player implements KeyListener {
     public Player(Point pos, int speed) {
     	PlayerSprite.load();
         this.box = new Box(pos, SIZE, SIZE);
+        this.cBox = new Box(box);
+        this.cBox.translate(SIZE/4, 2*SIZE/3);
+        this.cBox.resize(SIZE/2, SIZE/3);
         this.speed = speed;
 
         this.velX = 0;
@@ -43,10 +46,18 @@ public class Player implements KeyListener {
 
     public void update(Camera camera) {
         this.box.translate(this.velX, 0);
-        if (camera.getMap().isCollide(this.box)) this.box.translate(-this.velX, 0);
+        this.cBox.translate(this.velX, 0);
+        if (camera.getMap().isCollide(this.cBox)) {
+            this.box.translate(-this.velX, 0);
+            this.cBox.translate(-this.velX, 0);
+        }
         
         this.box.translate(0, this.velY);
-        if (camera.getMap().isCollide(this.box)) this.box.translate(0, -this.velY);
+        this.cBox.translate(0, this.velY);
+        if (camera.getMap().isCollide(this.cBox)) {
+            this.box.translate(0, -this.velY);
+            this.cBox.translate(0, -this.velY);
+        }
     }
 
     public void draw(Graphics2D g) {
