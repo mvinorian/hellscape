@@ -80,22 +80,22 @@ public class Player implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        char key = e.getKeyChar();
+        int key = e.getKeyCode();
         switch (key) {
-            case 'w':
+            case KeyEvent.VK_W:
                 this.velY = -this.speed;
                 this.isMovingUp = true;
                 break;
-            case 's':
+            case KeyEvent.VK_S:
                 this.velY = this.speed;
                 this.isMovingDown = true;
                 break;
-            case 'a':
+            case KeyEvent.VK_A:
                 this.velX = -this.speed;
                 this.isMovingLeft = true;
                 isLastRight = false;
                 break;
-            case 'd':
+            case KeyEvent.VK_D:
                 this.velX = this.speed;
                 this.isMovingRight = true;
                 isLastRight = true;
@@ -108,19 +108,19 @@ public class Player implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        char key = e.getKeyChar();
+        int key = e.getKeyCode();
         switch (key) {
-            case 'w':
+            case KeyEvent.VK_W:
                 this.velY = 0;
                 if (this.isMovingDown) this.velY = this.speed;
                 this.isMovingUp = false;
                 break;
-            case 's':
+            case KeyEvent.VK_S:
                 this.velY = 0;
                 if (this.isMovingUp) this.velY = -this.speed;
                 this.isMovingDown = false;
                 break;
-            case 'a':
+            case KeyEvent.VK_A:
                 this.velX = 0;
                 if (this.isMovingRight) {
                 	this.velX = this.speed;
@@ -128,7 +128,7 @@ public class Player implements KeyListener {
                 }
                 this.isMovingLeft = false;
                 break;
-            case 'd':
+            case KeyEvent.VK_D:
                 this.velX = 0;
                 if (this.isMovingLeft) {
                 	this.velX = -this.speed;

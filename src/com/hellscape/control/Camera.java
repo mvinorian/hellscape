@@ -34,7 +34,7 @@ public class Camera {
         this.map.draw(g);
         this.player.draw(g);
         g.translate(this.box.getX(), this.box.getY());
-        g.drawString("X: " + this.box.getX() + " Y: " + this.box.getY(), 10, 20);
+//        g.drawString("X: " + this.box.getX() + " Y: " + this.box.getY(), 10, 20);
     }
 
     public void resize(int width, int height) {
