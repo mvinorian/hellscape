@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import com.hellscape.character.Enemy;
 import com.hellscape.util.*;
 
 public class RandomMap {
@@ -14,6 +15,7 @@ public class RandomMap {
     private int[][] map;
     private int width, height;
     private Point start, end;
+    private List<Enemy> enemies;
     private Random rd;
 
     public RandomMap(int width, int height) {
@@ -26,6 +28,8 @@ public class RandomMap {
     public int[][] generate(int roomSize, int totalRoom) {
         List<Point> rooms = this.generateRoom(roomSize, totalRoom);
         List<Line> connections = this.generateConnection(rooms);
+        this.enemies = this.generateEnemies(rooms);
+
         
         this.start = new Point(rooms.get(0));
         this.end = new Point(rooms.get(0));
@@ -129,6 +133,13 @@ public class RandomMap {
         return connections;
     }
 
+    private List<Enemy> generateEnemies(List<Point> rooms) {
+        List<Enemy> enemies = new ArrayList<Enemy>();
+        for (Point room : rooms) enemies.add(new Enemy(room.scaled(Tile.TILE_SIZE, Tile.TILE_SIZE)));
+
+        return enemies;
+    }
+
     private void drawRoom(Point pos, int width, int height, int value) {
         for (int i = -height/2; i <= height/2; i++) {
             for (int j = -width/2; j <= width/2; j++) {
@@ -216,5 +227,9 @@ public class RandomMap {
 
     public Point getEnd() {
         return this.end;
+    }
+
+    public List<Enemy> getEnemies() {
+        return this.enemies;
     }
 }

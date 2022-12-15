@@ -16,7 +16,7 @@ public class Tileset {
 
     public static void load() {
         try {
-            tileset = ImageIO.read(new File("assets/heaven-tileset.png"));
+            tileset = ImageIO.read(new File("assets/tileset/heaven-tileset.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

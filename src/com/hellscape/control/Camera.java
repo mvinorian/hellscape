@@ -1,7 +1,9 @@
 package com.hellscape.control;
 
 import java.awt.Graphics2D;
+import java.util.List;
 
+import com.hellscape.character.Enemy;
 import com.hellscape.character.Player;
 import com.hellscape.map.Map;
 import com.hellscape.util.*;
@@ -10,11 +12,13 @@ public class Camera {
     
     private Map map;
     private Player player;
+    private List<Enemy> enemies;
 
     private Box box;
 
     public Camera(int width, int height, int speed) {
         this.map = new Map();
+        this.enemies = this.map.getEnemies();
 
         this.player = new Player(map.getStart(), speed);
 
@@ -32,9 +36,10 @@ public class Camera {
     public void render(Graphics2D g) {
         g.translate(-this.box.getX(), -this.box.getY());
         this.map.draw(g);
+        for (Enemy enemy : this.enemies) if (enemy.isAbove(this.player.getCBox()) == false) enemy.draw(g);
         this.player.draw(g);
+        for (Enemy enemy : this.enemies) if (enemy.isAbove(this.player.getCBox()) == true) enemy.draw(g);
         g.translate(this.box.getX(), this.box.getY());
-//        g.drawString("X: " + this.box.getX() + " Y: " + this.box.getY(), 10, 20);
     }
 
     public void resize(int width, int height) {
