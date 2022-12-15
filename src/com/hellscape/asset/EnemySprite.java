@@ -16,12 +16,13 @@ public class EnemySprite {
 
     public static final int TOTAL_FRAME = 8;
     
-    private static BufferedImage idle, move;
+    private static BufferedImage idle, move, attack;
     
     public static void load() {
         try {
             idle = ImageIO.read(new File("assets/slime/slime-idle.png"));
             move = ImageIO.read(new File("assets/slime/slime-move.png"));
+            attack = ImageIO.read(new File("assets/slime/slime-attack.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,6 +36,9 @@ public class EnemySprite {
                 break;
             case Enemy.STATE_MOVE:
                 sprite = move;
+                break;
+            case Enemy.STATE_ATTACK:
+                sprite = attack;
                 break;
         }
         if (sprite == null) return;

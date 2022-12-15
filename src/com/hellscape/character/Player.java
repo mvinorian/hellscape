@@ -67,6 +67,7 @@ public class Player implements KeyListener {
         	PlayerSprite.drawSpriteIdle(g, this.box, spriteType, isLastRight);
         }
         else PlayerSprite.drawSpriteRun(g, this.box, spriteType, isLastRight);
+        g.drawRect(this.box.getX(), this.box.getY(), this.box.getWidth(), this.box.getHeight());
         g.drawRect(this.cBox.getX(), this.cBox.getY(), this.cBox.getWidth(), this.cBox.getHeight());
     }
 
