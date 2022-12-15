@@ -12,7 +12,7 @@ public class Main {
             public void run() {
                 JFrame frame = new JFrame("Test Main");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setContentPane(new CameraPanel(800, 480, 3));
+                frame.setContentPane(new CameraPanel(1120, 640, 2));
                 frame.pack();
                 frame.setVisible(true);
             }

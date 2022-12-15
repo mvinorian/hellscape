@@ -108,4 +108,14 @@ public class Map {
     public int getEndY() {
         return this.end.y;
     }
+
+    public int[][] getGrid() {
+        int[][] grid = new int[WIDTH][HEIGHT];
+
+        for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < WIDTH; j++) {
+            grid[i][j] = (this.map[i][j] & 1) == 0 ? 1 : 0;
+        }
+
+        return grid;
+    }
 }

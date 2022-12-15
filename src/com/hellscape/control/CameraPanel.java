@@ -6,6 +6,8 @@ import java.awt.event.ComponentEvent;
 
 import javax.swing.JPanel;
 
+import com.hellscape.ui.StatusBar;
+
 public class CameraPanel extends JPanel {
 
     public static final int REFRESH_RATE = 120;
@@ -14,9 +16,11 @@ public class CameraPanel extends JPanel {
     private int height;
     
     private Camera camera;
+    private StatusBar status;
 
     public CameraPanel(int width, int height, int speed) {
         this.camera = new Camera(width, height, speed);
+        this.status = new StatusBar(camera);
 
         this.width = width;
         this.height = height;
@@ -41,6 +45,7 @@ public class CameraPanel extends JPanel {
             public void run() {
                 while(true) {
                     camera.update();
+                    status.update(camera);
                     repaint();
 
                     try {
@@ -57,5 +62,6 @@ public class CameraPanel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
         camera.render(g2d);
+        status.draw(g2d);
     }
 }
