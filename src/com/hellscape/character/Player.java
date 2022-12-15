@@ -31,8 +31,7 @@ public class Player implements KeyListener {
     	PlayerSprite.load();
         this.box = new Box(pos, SIZE, SIZE);
         this.cBox = new Box(box);
-        this.cBox.translate(SIZE/4, 2*SIZE/3);
-        this.cBox.resize(SIZE/2, SIZE/3);
+        this.cBox.setPadding(120, 40, 0, 40);
         this.speed = speed;
 
         this.velX = 0;
@@ -46,19 +45,11 @@ public class Player implements KeyListener {
     }
 
     public void update(Camera camera) {
-        this.box.translate(this.velX, 0);
-        this.cBox.translate(this.velX, 0);
-        if (camera.getMap().isCollide(this.cBox)) {
-            this.box.translate(-this.velX, 0);
-            this.cBox.translate(-this.velX, 0);
-        }
+        this.translate(this.velX, 0);
+        if (camera.getMap().isCollide(this.cBox)) this.translate(-this.velX, 0);
         
-        this.box.translate(0, this.velY);
-        this.cBox.translate(0, this.velY);
-        if (camera.getMap().isCollide(this.cBox)) {
-            this.box.translate(0, -this.velY);
-            this.cBox.translate(0, -this.velY);
-        }
+        this.translate(0, this.velY);
+        if (camera.getMap().isCollide(this.cBox)) this.translate(0, -this.velY);
     }
 
     public void draw(Graphics2D g) {
@@ -76,6 +67,16 @@ public class Player implements KeyListener {
         	PlayerSprite.drawSpriteIdle(g, this.box, spriteType, isLastRight);
         }
         else PlayerSprite.drawSpriteRun(g, this.box, spriteType, isLastRight);
+        g.drawRect(this.cBox.getX(), this.cBox.getY(), this.cBox.getWidth(), this.cBox.getHeight());
+    }
+
+    public boolean isCollide(Box box) {
+        return this.cBox.isCollide(box);
+    }
+
+    private void translate(int dX, int dY) {
+        this.box.translate(dX, dY);
+        this.cBox.translate(dX, dY);
     }
 
     @Override
@@ -144,6 +145,10 @@ public class Player implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
+    }
+
+    public Box getCBox() {
+        return this.cBox;
     }
 
     public Point getPos() {
