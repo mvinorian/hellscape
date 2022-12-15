@@ -9,7 +9,7 @@ import com.hellscape.util.*;
 
 public class Enemy {
 
-    public static final int BOX_SIZE = 160;
+    public static final int BOX_SIZE = 128;
     public static final int SPRITE_SIZE = 32;
     public static final int STATE_IDLE = 1;
     public static final int STATE_MOVE = 2;
@@ -29,8 +29,8 @@ public class Enemy {
         this.box = new Box(pos, BOX_SIZE, BOX_SIZE);
         this.cBox = new Box(this.box);
         this.hBox = new Box(this.box);
-        this.cBox.setPadding(120, 30, 0, 30);
-        this.hBox.setPadding(40, 30, 0, 30);
+        this.cBox.setPadding(3*BOX_SIZE/4, 3*BOX_SIZE/16, 0, 3*BOX_SIZE/16);
+        this.hBox.setPadding(BOX_SIZE/4, 3*BOX_SIZE/16, 0, 3*BOX_SIZE/16);
         this.state = STATE_IDLE;
         this.onCamera = false;
     }

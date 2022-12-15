@@ -10,7 +10,7 @@ import com.hellscape.util.*;
 
 public class Player implements KeyListener {
 
-    public static final int SIZE = 160;
+    public static final int SIZE = 128;
     
     private Box box;
     private Box cBox;
@@ -31,7 +31,7 @@ public class Player implements KeyListener {
     	PlayerSprite.load();
         this.box = new Box(pos, SIZE, SIZE);
         this.cBox = new Box(box);
-        this.cBox.setPadding(120, 40, 0, 40);
+        this.cBox.setPadding(3*SIZE/4, SIZE/4, 0, SIZE/4);
         this.speed = speed;
 
         this.velX = 0;

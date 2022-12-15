@@ -8,7 +8,7 @@ import com.hellscape.util.*;
 
 public class Tile {
     
-    public static final int TILE_SIZE = 160;
+    public static final int TILE_SIZE = 128;
     public static final int SPRITE_SIZE = 32;
 
     private Box box;
