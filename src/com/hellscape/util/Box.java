@@ -40,7 +40,14 @@ public class Box {
         this.height = height;
     }
 
+    public void setPadding(int top, int right, int bottom, int left) {
+        this.width -= (left + right);
+        this.height -= (top + bottom);
+        this.translate(left, top);
+    }
+
     public boolean isCollide(Box box) {
+        if (box == this) return false;
         return (this.pos.x < box.getX() + box.getWidth() &&
                 this.pos.y < box.getY() + box.getHeight() &&
                 this.pos.x + this.width > box.getX() &&

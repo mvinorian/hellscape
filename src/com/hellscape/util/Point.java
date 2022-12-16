@@ -33,6 +33,12 @@ public class Point {
         this.x *= rX;
         this.y *= rY;
     }
+
+    public Point scaled(int rX, int rY) {
+        Point p = new Point(this);
+        p.scale(rX, rY);
+        return p;
+    }
     
     public double getDistance(Point p) {
         double dX = (double)(this.x-p.x);
