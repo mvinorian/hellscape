@@ -16,6 +16,8 @@ public class Enemy {
     public static final int STATE_ATTACK = 3;
     public static final int FACE_RIGHT = 0;
     public static final int FACE_LEFT = 1;
+
+    private static int enemyCount = 0;
     
     private Box box;
     private Box cBox;
@@ -24,6 +26,7 @@ public class Enemy {
     private int state;
     private int face;
     private boolean onCamera;
+    private boolean isDead;
 
     public Enemy(Point pos) {
         this.box = new Box(pos, BOX_SIZE, BOX_SIZE);
@@ -33,9 +36,13 @@ public class Enemy {
         this.hBox.setPadding(BOX_SIZE/4, 3*BOX_SIZE/16, 0, 3*BOX_SIZE/16);
         this.state = STATE_IDLE;
         this.onCamera = false;
+        this.isDead = false;
+        enemyCount++;
     }
 
     public void update(Camera camera) {
+        if (this.isDead == true) return;
+
         this.onCamera = this.box.isCollide(camera.getCamBox());
         if (this.onCamera == false) return;
         Point dst = camera.getPlayer().getPos();
@@ -72,9 +79,15 @@ public class Enemy {
 
         if (moveX || moveY) this.state = STATE_MOVE;
         else this.state = STATE_IDLE;
+
+        if (this.hBox.isCollide(camera.getPlayer().getBox())) {
+            this.isDead = true;
+            enemyCount--;
+        }
     }
 
     public void draw(Graphics2D g) {
+        if (this.isDead == true) return;
         if (this.onCamera == false) return;
 
         this.frame = (this.frame+1) % CameraPanel.REFRESH_RATE;
@@ -90,14 +103,25 @@ public class Enemy {
     }
 
     public boolean isCollide(Box box) {
+        if (this.isDead == true) return false;
         return this.cBox.isCollide(box);
     }
     
     public boolean isAbove(Box box) {
+        if (this.isDead == true) return false;
         return this.box.isCollide(box) && box.getY() < this.cBox.getY();
     }
 
+    public boolean isDead() {
+        return this.isDead;
+    }
+
     public Box getBox() {
+        if (this.isDead == true) return new Box(0, 0, 0, 0);
         return this.box;
+    }
+
+    public static int getEnemyCount() {
+        return enemyCount;
     }
 }

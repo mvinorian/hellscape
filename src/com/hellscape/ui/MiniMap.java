@@ -25,6 +25,7 @@ public class MiniMap {
     }
 
     public void update(Camera camera) {
+        this.grid = camera.getMap().getGrid();
         this.playerX = camera.getPlayer().getCBox().getX();
         this.playerY = camera.getPlayer().getCBox().getY();
         this.playerX /= Tile.TILE_SIZE;

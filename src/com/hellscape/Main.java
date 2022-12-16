@@ -2,11 +2,13 @@ package com.hellscape;
 
 import javax.swing.JFrame;
 
+import com.hellscape.asset.AssetManager;
 import com.hellscape.control.CameraPanel;
 
 public class Main {
     
     public static void main(String[] args) {
+        AssetManager.load();
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -15,6 +17,7 @@ public class Main {
                 frame.setContentPane(new CameraPanel(1120, 640, 2));
                 frame.pack();
                 frame.setVisible(true);
+                frame.setResizable(false);
             }
         });
     }

@@ -1,5 +1,6 @@
 package com.hellscape.ui;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import com.hellscape.control.Camera;
@@ -22,5 +23,7 @@ public class StatusBar {
 
     public void draw(Graphics2D g) {
         this.minimap.draw(g);
+        g.setColor(Color.WHITE);
+        g.drawString(String.format("Floor %d", Map.getFloorCount()), 10, 20);
     }
 }

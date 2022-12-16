@@ -45,6 +45,7 @@ public class RandomMap {
         this.drawRoom(end, 1, 3, 0);
         
         this.start.translate(0, -1);
+        this.end.translate(0, -1);
         this.start.scale(Tile.TILE_SIZE, Tile.TILE_SIZE);
         this.end.scale(Tile.TILE_SIZE, Tile.TILE_SIZE);
         this.paint();

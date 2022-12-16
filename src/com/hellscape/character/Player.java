@@ -28,7 +28,6 @@ public class Player implements KeyListener {
     private boolean isLastRight;
 
     public Player(Point pos, int speed) {
-    	PlayerSprite.load();
         this.box = new Box(pos, SIZE, SIZE);
         this.cBox = new Box(box);
         this.cBox.setPadding(3*SIZE/4, SIZE/4, 0, SIZE/4);
@@ -73,6 +72,12 @@ public class Player implements KeyListener {
 
     public boolean isCollide(Box box) {
         return this.cBox.isCollide(box);
+    }
+
+    public void move(Point p) {
+        this.box.move(p);
+        this.cBox = new Box(box);
+        this.cBox.setPadding(3*SIZE/4, SIZE/4, 0, SIZE/4);
     }
 
     private void translate(int dX, int dY) {
@@ -146,6 +151,10 @@ public class Player implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
+    }
+
+    public Box getBox() {
+        return this.box;
     }
 
     public Box getCBox() {

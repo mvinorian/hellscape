@@ -31,6 +31,7 @@ public class Camera {
         this.box.move(this.player.getPos());
         this.box.translate((Player.SIZE-this.box.getWidth())/2, (Player.SIZE-this.box.getHeight())/2);
         this.map.update(this);
+        this.enemies = this.map.getEnemies();
     }
 
     public void render(Graphics2D g) {
