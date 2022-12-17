@@ -1,4 +1,4 @@
-package com.hellscape.control;
+package com.hellscape.ui;
 
 import java.awt.Graphics2D;
 import java.util.List;

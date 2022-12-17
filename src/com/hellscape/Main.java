@@ -3,7 +3,7 @@ package com.hellscape;
 import javax.swing.JFrame;
 
 import com.hellscape.asset.AssetManager;
-import com.hellscape.control.CameraPanel;
+import com.hellscape.ui.GamePanel;
 
 public class Main {
     
@@ -14,7 +14,7 @@ public class Main {
             public void run() {
                 JFrame frame = new JFrame("Test Main");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setContentPane(new CameraPanel(1120, 640, 2));
+                frame.setContentPane(new GamePanel(1152, 640, 2));
                 frame.pack();
                 frame.setVisible(true);
                 frame.setResizable(false);

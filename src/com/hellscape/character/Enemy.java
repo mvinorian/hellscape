@@ -3,8 +3,8 @@ package com.hellscape.character;
 import java.awt.Graphics2D;
 
 import com.hellscape.asset.EnemySprite;
-import com.hellscape.control.Camera;
-import com.hellscape.control.CameraPanel;
+import com.hellscape.ui.Camera;
+import com.hellscape.ui.GamePanel;
 import com.hellscape.util.*;
 
 public class Enemy {
@@ -90,10 +90,10 @@ public class Enemy {
         if (this.isDead == true) return;
         if (this.onCamera == false) return;
 
-        this.frame = (this.frame+1) % CameraPanel.REFRESH_RATE;
+        this.frame = (this.frame+1) % GamePanel.REFRESH_RATE;
         EnemySprite.draw(g, this.box, this.frame, this.state, this.face);
-        g.drawRect(this.hBox.getX(), this.hBox.getY(), this.hBox.getWidth(), this.hBox.getHeight());
-        g.drawRect(this.cBox.getX(), this.cBox.getY(), this.cBox.getWidth(), this.cBox.getHeight());
+        // g.drawRect(this.hBox.getX(), this.hBox.getY(), this.hBox.getWidth(), this.hBox.getHeight());
+        // g.drawRect(this.cBox.getX(), this.cBox.getY(), this.cBox.getWidth(), this.cBox.getHeight());
     }
 
     private void translate(int dX, int dY) {

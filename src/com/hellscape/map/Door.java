@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 
 import com.hellscape.asset.ObjectSprite;
 import com.hellscape.character.Enemy;
-import com.hellscape.control.Camera;
+import com.hellscape.ui.Camera;
 import com.hellscape.util.Box;
 import com.hellscape.util.Point;
 

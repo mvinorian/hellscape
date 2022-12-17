@@ -3,7 +3,7 @@ package com.hellscape.map;
 import java.awt.Graphics2D;
 
 import com.hellscape.asset.Tileset;
-import com.hellscape.control.Camera;
+import com.hellscape.ui.Camera;
 import com.hellscape.util.*;
 
 public class Tile {

@@ -1,9 +1,10 @@
 package com.hellscape.ui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 
-import com.hellscape.control.Camera;
 import com.hellscape.map.Map;
 import com.hellscape.map.Tile;
 import com.hellscape.util.Box;
@@ -34,11 +35,21 @@ public class MiniMap {
 
     public void draw(Graphics2D g) {
         g.setColor(Color.WHITE);
+        g.setStroke(new BasicStroke(3));
+        g.drawRoundRect(this.box.getX(), this.box.getY(), this.box.getWidth(), this.box.getHeight(), 16, 16);
         for (int i = 0; i < 57; i++) for (int j = 0; j < 57; j++) {
             if (this.grid[j][i] == 0) continue;
             g.fillRect(this.box.getX()+unit*i, this.box.getY()+unit*j, unit, unit);
         }
         g.setColor(Color.BLUE);
         g.fillRect(this.box.getX()+unit*playerX, this.box.getY()+unit*playerY, unit, unit);
+        
+        String floor = String.format("%d / 7 F", Map.getFloorCount());
+        g.setColor(Color.WHITE);
+        g.setFont(g.getFont().deriveFont(Font.BOLD, 24F));
+        g.drawString(floor, 
+            this.box.getX()+this.box.getWidth()/2
+                -(int)g.getFontMetrics().getStringBounds(floor, g).getWidth()/2, 
+            this.box.getY()+this.box.getHeight()+30);
     }
 }

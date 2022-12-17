@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hellscape.character.Enemy;
-import com.hellscape.control.Camera;
+import com.hellscape.ui.Camera;
 import com.hellscape.util.*;
 
 public class Map {

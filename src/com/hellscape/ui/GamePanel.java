@@ -1,4 +1,4 @@
-package com.hellscape.control;
+package com.hellscape.ui;
 
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -6,9 +6,7 @@ import java.awt.event.ComponentEvent;
 
 import javax.swing.JPanel;
 
-import com.hellscape.ui.StatusBar;
-
-public class CameraPanel extends JPanel {
+public class GamePanel extends JPanel {
 
     public static final int REFRESH_RATE = 120;
 
@@ -18,7 +16,7 @@ public class CameraPanel extends JPanel {
     private Camera camera;
     private StatusBar status;
 
-    public CameraPanel(int width, int height, int speed) {
+    public GamePanel(int width, int height, int speed) {
         this.camera = new Camera(width, height, speed);
         this.status = new StatusBar(camera);
 

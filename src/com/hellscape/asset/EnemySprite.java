@@ -8,7 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.hellscape.character.Enemy;
-import com.hellscape.control.CameraPanel;
+import com.hellscape.ui.GamePanel;
 import com.hellscape.util.Box;
 import com.hellscape.util.Point;
 
@@ -43,7 +43,7 @@ public class EnemySprite {
         }
         if (sprite == null) return;
         
-        frame = frame * TOTAL_FRAME / CameraPanel.REFRESH_RATE;
+        frame = frame * TOTAL_FRAME / GamePanel.REFRESH_RATE;
 
         Point s1 = new Point(frame*Enemy.SPRITE_SIZE, face*Enemy.SPRITE_SIZE);
         Point s2 = new Point((frame+1)*Enemy.SPRITE_SIZE, (face+1)*Enemy.SPRITE_SIZE);
