@@ -1,65 +1,113 @@
 package com.hellscape.ui;
 
-import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
-public class GamePanel extends JPanel {
+import com.hellscape.character.Entity;
+import com.hellscape.character.Player;
+import com.hellscape.map.Map;
+import com.hellscape.map.MiniMap;
 
-    public static final int REFRESH_RATE = 120;
-
-    private int width;
-    private int height;
+public class GamePanel extends JPanel implements Runnable {
     
-    private Camera camera;
-    private StatusBar status;
+    public final int spriteSize = 32;
+    public final int scale = 4;
+    public final int tileSize = spriteSize*scale;
 
-    public GamePanel(int width, int height, int speed) {
-        this.camera = new Camera(width, height, speed);
-        this.status = new StatusBar(camera);
+    public final int maxTileRow = 5;
+    public final int maxTileCol = 9;
+    public final int screenWidth = maxTileCol*tileSize;
+    public final int screenHeight = maxTileRow*tileSize;
 
-        this.width = width;
-        this.height = height;
+    public final int refreshRate = 120;
 
-        this.setPreferredSize(new Dimension(this.width, this.height));
-        this.addKeyListener(this.camera.getPlayer());
-        this.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                super.componentResized(e);
-                Dimension dim = e.getComponent().getSize();
-                camera.resize(dim.width, dim.height);
-            }
-        });
+    private Thread thread;
+    public KeyHandler keyH;
+
+    public Player player;
+    public Map world;
+    public MiniMap miniMap;
+    public List<Entity> enemies;
+
+    public List<Drawable> background;
+    public List<Drawable> foreground;
+
+    public GamePanel() {
+        this.enemies = new ArrayList<Entity>();
+        this.background = new ArrayList<Drawable>();
+        this.foreground = new ArrayList<Drawable>();
+
+        this.setDefault();
+        this.setPreferredSize(new Dimension(screenWidth , screenHeight));
+        this.addKeyListener(keyH);
+        this.setBackground(new Color(135, 133, 121));
         this.setFocusable(true);
-        this.startThread();
+    }
+    
+    public void setDefault() {
+        this.keyH = new KeyHandler(this);
+        this.world = new Map(this);
+        this.world.generate();
+        this.player = new Player(this);
+        this.world.generateEnemies();
+        this.miniMap = new MiniMap(this, screenWidth-3*world.maxWorldCol, 0);
     }
 
     public void startThread() {
-        Thread gameThread = new Thread() {
-            @Override
-            public void run() {
-                while(true) {
-                    camera.update();
-                    status.update(camera);
-                    repaint();
-
-                    try {
-                        Thread.sleep(1000 / REFRESH_RATE);
-                    } catch (InterruptedException e) {}
-                }
-            }
-        };
-        gameThread.start();
+        this.thread = new Thread(this);
+        this.thread.start();
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    public void run() {
+        double delta = 0;
+        double drawInterval = 1e9 / refreshRate;
+        long lastTime = System.nanoTime();
+        long currentTime;
+
+        while (this.thread != null) {
+            currentTime = System.nanoTime();
+            delta += (currentTime-lastTime) / drawInterval;
+            lastTime = currentTime;
+
+            if (delta >= 1) {
+                this.repaint();
+                delta--;
+            }
+        }
+    }
+
+    public void update() {
+        this.player.update();
+        this.world.update();
+        this.miniMap.update();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D)g;
-        camera.render(g2d);
-        status.draw(g2d);
+        this.update();
+
+        Graphics2D g2d = (Graphics2D) g;
+
+        this.world.draw(g2d);
+        for (Drawable obj : background) obj.draw(g2d);
+        this.player.draw(g2d);
+        for (Drawable obj : foreground) obj.draw(g2d);
+
+        g2d.dispose();
+    }
+    
+    public void reset() {
+        this.world.generate();
+        this.player.move(world.worldStart.x*tileSize, world.worldStart.y*tileSize);
+        this.world.generateEnemies();
+        this.miniMap.reset();
     }
 }

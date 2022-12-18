@@ -1,69 +1,109 @@
 package com.hellscape.map;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
-import com.hellscape.asset.ObjectSprite;
-import com.hellscape.character.Enemy;
-import com.hellscape.ui.Camera;
+import javax.imageio.ImageIO;
+
+import com.hellscape.ui.Drawable;
+import com.hellscape.ui.GamePanel;
 import com.hellscape.util.Box;
-import com.hellscape.util.Point;
 
-public class Door {
+public class Door implements Drawable {
 
-    public static final int WIDTH = 3*Tile.TILE_SIZE;
-    public static final int HEIGHT = 2*Tile.TILE_SIZE;
-    
-    private Box box;
-    private Box cBox;
-    private Box hBox;
-    private int state;
-    private boolean onCamera;
-    private boolean entered;
+    public final int tileWidth = 3;
+    public final int tileHeight = 2;
+    public final int width;
+    public final int height;
+    private final int maxType = 2;
+    private final int closed = 0;
+    private final int open = 1;
+    private final int background = 1;
+    private final int foreground = 2;
 
-    public Door(Point pos) {
-        this.box = new Box(pos, WIDTH, HEIGHT);
-        this.box.translate(-Tile.TILE_SIZE, 0);
-        this.state = ObjectSprite.DOOR_CLOSED;
-        this.setState(state);
-        this.onCamera = false;
-        this.entered = false;
+    private GamePanel gp;
+    private int worldX, worldY;
+    private int screenX, screenY;
+    private int zPos;
+
+    public int state;
+    public Box cBox;
+    private BufferedImage[] sprite;
+
+    public Door(GamePanel gp, int worldX, int worldY) {
+        this.gp = gp;
+        this.width = tileWidth*gp.tileSize;
+        this.height = tileHeight*gp.tileSize;
+
+        this.worldX = worldX - gp.tileSize;
+        this.worldY = worldY;
+
+        this.cBox = new Box(this.worldX, this.worldY, width, height);
+        this.cBox.setPadding(3*height/4, width/4, height/16, width/4);
+        
+        this.state = closed;
+        this.sprite = new BufferedImage[maxType];
+        this.loadSprite("/decoration/door.png");
     }
 
-    public void update(Camera camera) {
-        this.entered = false;
-        this.onCamera = camera.getCamBox().isCollide(this.box);
-        if (Enemy.getEnemyCount() == 0) this.setState(ObjectSprite.DOOR_OPEN);
-        if (camera.getPlayer().isCollide(this.hBox) == true) this.entered = true;
+    @Override
+    public void update() {
+        if (state == open && gp.player.isCollide(cBox)) gp.reset();
+        if (updateZPos() == false) return;
+        if (gp.enemies.isEmpty()) this.state = open;
     }
 
+    @Override
     public void draw(Graphics2D g) {
-        if (this.onCamera == false) return;
-        ObjectSprite.draw(g, this.box, state);
+        g.drawImage(sprite[state], screenX, screenY, null);
     }
 
     public boolean isCollide(Box box) {
+        if (state == open) return false;
         return this.cBox.isCollide(box);
     }
 
-    public boolean isEntered() {
-        return this.entered;
-    }
+    private boolean updateZPos() {
+        this.screenX = worldX - gp.player.worldX + gp.player.screenX;
+        this.screenY = worldY - gp.player.worldY + gp.player.screenY;
 
-    private void setState(int state) {
-        this.state = state;
-        switch (state) {
-            case ObjectSprite.DOOR_CLOSED:
-                this.cBox = new Box(box);
-                this.cBox.setPadding(3*HEIGHT/4, WIDTH/4, HEIGHT/16, WIDTH/4);
-                this.hBox = new Box(box);
-                this.hBox.resize(0, 0);
-                break;
-            case ObjectSprite.DOOR_OPEN:
-                this.cBox = new Box(box);
-                this.cBox.resize(0, 0);
-                this.hBox = new Box(box);
-                this.hBox.setPadding(3*HEIGHT/4, WIDTH/4, HEIGHT/16, WIDTH/4);
-                break;
+        if (screenX < -width || screenX > gp.screenWidth + width
+         || screenY < -height || screenY > gp.screenHeight + height) {
+            if (zPos == foreground) gp.foreground.remove(this);
+            if (zPos == background) gp.background.remove(this);
+            return false;
+        }
+
+        if (this.cBox.getY() > gp.player.cBox.getY()) {
+            if (this.zPos != foreground) gp.foreground.add(0, this);
+            if (this.zPos == background) gp.background.remove(this);
+            this.zPos = foreground;
+        } else {
+            if (this.zPos != background) gp.background.add(this);
+            if (this.zPos == foreground) gp.foreground.remove(this);
+            this.zPos = background;
+        }
+        return true;
+    }
+    
+    private void loadSprite(String path) {
+        try {
+            BufferedImage sprite = ImageIO.read(getClass().getResource(path));
+            for (int type = 0; type < maxType; type++) {
+                this.sprite[type] = new BufferedImage(width, height, sprite.getType());
+                Graphics2D g = this.sprite[type].createGraphics();
+
+                g.drawImage(
+                    sprite, 0, 0, width, height,
+                    type * tileWidth * gp.spriteSize, 0,
+                    (type+1) * tileWidth * gp.spriteSize,
+                    tileHeight * gp.spriteSize, null
+                );
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -1,10 +1,15 @@
 {
-    "java.dependency.packagePresentation": "hierarchical",
+    "java.project.sourcePaths": [
+        "src",
+        "res"
+    ],
+    "java.project.outputPath": "bin",
     "java.completion.filteredTypes": [
         "com.sun.*",
         "sun.*",
         "jdk.*",
         "org.graalvm.*",
         "io.micrometer.shaded.*"
-    ]
+    ],
+    "java.dependency.packagePresentation": "hierarchical"
 }
