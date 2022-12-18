@@ -8,7 +8,7 @@ import com.hellscape.ui.GamePanel;
 
 public class MiniMap implements Drawable {
     
-    private final int unit = 3;
+    public static final int unit = 4;
 
     private GamePanel gp;
     private int screenX, screenY;

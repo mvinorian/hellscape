@@ -56,7 +56,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.world.generate();
         this.player = new Player(this);
         this.world.generateEnemies();
-        this.miniMap = new MiniMap(this, screenWidth-3*world.maxWorldCol, 0);
+        this.miniMap = new MiniMap(this, screenWidth-MiniMap.unit*world.maxWorldCol, 0);
     }
 
     public void startThread() {

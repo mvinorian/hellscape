@@ -31,13 +31,13 @@ public class Door implements Drawable {
     public Box cBox;
     private BufferedImage[] sprite;
 
-    public Door(GamePanel gp, int worldX, int worldY) {
+    public Door(GamePanel gp) {
         this.gp = gp;
         this.width = tileWidth*gp.tileSize;
         this.height = tileHeight*gp.tileSize;
 
-        this.worldX = worldX - gp.tileSize;
-        this.worldY = worldY;
+        this.worldX = (gp.world.worldEnd.x-1)*gp.tileSize;
+        this.worldY = gp.world.worldEnd.y*gp.tileSize;
 
         this.cBox = new Box(this.worldX, this.worldY, width, height);
         this.cBox.setPadding(3*height/4, width/4, height/16, width/4);
@@ -49,9 +49,14 @@ public class Door implements Drawable {
 
     @Override
     public void update() {
-        if (state == open && gp.player.isCollide(cBox)) gp.reset();
-        if (updateZPos() == false) return;
-        if (gp.enemies.isEmpty()) this.state = open;
+        this.updateZPos();
+        if (state == open && gp.player.isCollide(cBox)) {
+            gp.reset();
+            return;
+        }
+        if (gp.world.enemies.isEmpty()) {
+            this.state = open;
+        }
     }
 
     @Override
@@ -64,16 +69,17 @@ public class Door implements Drawable {
         return this.cBox.isCollide(box);
     }
 
-    private boolean updateZPos() {
+    public void reset() {
+        this.worldX = (gp.world.worldEnd.x-1)*gp.tileSize;
+        this.worldY = gp.world.worldEnd.y*gp.tileSize;
+        this.cBox = new Box(this.worldX, this.worldY, width, height);
+        this.cBox.setPadding(3*height/4, width/4, height/16, width/4);
+        this.state = closed;
+    }
+
+    private void updateZPos() {
         this.screenX = worldX - gp.player.worldX + gp.player.screenX;
         this.screenY = worldY - gp.player.worldY + gp.player.screenY;
-
-        if (screenX < -width || screenX > gp.screenWidth + width
-         || screenY < -height || screenY > gp.screenHeight + height) {
-            if (zPos == foreground) gp.foreground.remove(this);
-            if (zPos == background) gp.background.remove(this);
-            return false;
-        }
 
         if (this.cBox.getY() > gp.player.cBox.getY()) {
             if (this.zPos != foreground) gp.foreground.add(0, this);
@@ -84,7 +90,6 @@ public class Door implements Drawable {
             if (this.zPos == foreground) gp.foreground.remove(this);
             this.zPos = background;
         }
-        return true;
     }
     
     private void loadSprite(String path) {

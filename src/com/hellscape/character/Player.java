@@ -17,7 +17,7 @@ public class Player extends Entity {
 
     public Player(GamePanel gp) {
         super(gp);
-        this.loadSprite("/enemy/slime");
+        this.loadSprite("/player/assasin");
         this.screenX = (gp.screenWidth - gp.tileSize)/2;
         this.screenY = (gp.screenHeight - gp.tileSize)/2;
 
@@ -55,11 +55,11 @@ public class Player extends Entity {
         this.frameCount = (frameCount+1) % gp.refreshRate;
         int frame = frameCount * maxFrame / gp.refreshRate;
         g.drawImage(sprite[state][direction][frame], screenX, screenY, null);
-        g.drawRect(
-            cBox.getX() - worldX + screenX, 
-            cBox.getY() - worldY + screenY, 
-            cBox.getWidth(), cBox.getHeight()
-        );
+        // g.drawRect(
+        //     cBox.getX() - worldX + screenX, 
+        //     cBox.getY() - worldY + screenY, 
+        //     cBox.getWidth(), cBox.getHeight()
+        // );
     }
 
     public void move(int worldX, int worldY) {

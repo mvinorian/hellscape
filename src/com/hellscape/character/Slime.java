@@ -22,8 +22,6 @@ public class Slime extends Entity {
 
         this.worldX = worldX;
         this.worldY = worldY;
-        this.screenX = worldX - gp.player.worldX + gp.player.screenX;
-        this.screenY = worldY - gp.player.worldY + gp.player.screenY;
         this.speed = 1;
         
         this.hBox = new Box(worldX, worldY, gp.tileSize, gp.tileSize);

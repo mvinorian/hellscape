@@ -112,7 +112,8 @@ public class Map implements Drawable {
         this.worldStart = rm.getStart();
         this.worldEnd = rm.getEnd();
         this.rooms = rm.getRooms();
-        this.door = new Door(gp, worldEnd.x*gp.tileSize, worldEnd.y*gp.tileSize);
+        if (this.door == null) this.door = new Door(gp);
+        else this.door.reset();
     }
 
     public void generateEnemies() {
