@@ -16,9 +16,9 @@ public abstract class Entity implements Drawable {
     protected final int maxFrame = 8;
     protected final int maxType = 3;
     protected final int maxDirection = 2;
-    protected final int idle = 0;
-    protected final int move = 1;
-    protected final int attack = 2;
+    protected final int idleState = 0;
+    protected final int moveState = 1;
+    protected final int attackState = 2;
     public final int faceRight = 0;
     public final int faceLeft = 1;
     
@@ -28,6 +28,11 @@ public abstract class Entity implements Drawable {
     public boolean collisionOn;
     public int speed;
     public int velX, velY;
+
+    public int attack;
+    public int maxLife;
+    public int life;
+    
     public int state;
     public int direction;
     public Color shaderColor;
@@ -39,7 +44,7 @@ public abstract class Entity implements Drawable {
     protected Entity(GamePanel gp) {
         this.gp = gp;
         this.frameCount = 0;
-        this.state = idle;
+        this.state = idleState;
         this.direction = faceRight;
         this.sprite = new BufferedImage[maxType][maxDirection][maxFrame];
         this.shaderColor = new Color(0, 0, 0, 0.3F);
@@ -47,6 +52,9 @@ public abstract class Entity implements Drawable {
         this.worldX = 0; this.worldY = 0;
         this.velX = 0; this.velY = 0;
         this.speed = 0;
+        this.attack = 1;
+        this.maxLife = 10;
+        this.life = 10;
         this.cBox = new Box(0, 0, 0, 0);
         this.hBox = new Box(0, 0, 0, 0);
     }
@@ -75,9 +83,9 @@ public abstract class Entity implements Drawable {
     protected void loadSprite(String path) {
         try {
             BufferedImage[] sprite = new BufferedImage[maxType];
-            sprite[idle] = ImageIO.read(getClass().getResourceAsStream(path + "/idle.png"));
-            sprite[move] = ImageIO.read(getClass().getResourceAsStream(path + "/move.png"));
-            sprite[attack] = ImageIO.read(getClass().getResourceAsStream(path + "/attack.png"));
+            sprite[idleState] = ImageIO.read(getClass().getResourceAsStream(path + "/idle.png"));
+            sprite[moveState] = ImageIO.read(getClass().getResourceAsStream(path + "/move.png"));
+            sprite[attackState] = ImageIO.read(getClass().getResourceAsStream(path + "/attack.png"));
 
             for (int type = 0; type < maxType; type++) 
             for (int direction = 0; direction < maxDirection; direction++)

@@ -28,6 +28,9 @@ public class Player extends Entity {
         this.cBox = new Box(worldX, worldY, gp.tileSize, gp.tileSize);
         this.cBox.setPadding(3*gp.tileSize/4, gp.tileSize/4, 0, gp.tileSize/4);
 
+        this.maxLife = 100;
+        this.life = maxLife;
+
         this.isMovingUp = false;
         this.isMovingDown = false;
         this.isMovingLeft = false;
@@ -36,12 +39,15 @@ public class Player extends Entity {
     
     @Override
     public void update() {
+        if (this.life == 0) {
+            gp.gameState = GamePanel.endState;
+        }
         if (velX == 0 && velY == 0) {
-            if (this.state != idle) this.frameCount = 0;
-            this.state = idle;
+            if (this.state != idleState) this.frameCount = 0;
+            this.state = idleState;
         } else {
-            if (this.state != move) this.frameCount = 0;
-            this.state = move;
+            if (this.state != moveState) this.frameCount = 0;
+            this.state = moveState;
         }
         this.translate(velX, 0);
         if (gp.world.isCollide(cBox) == true) this.translate(-velX, 0);
@@ -61,6 +67,10 @@ public class Player extends Entity {
         //     cBox.getY() - worldY + screenY, 
         //     cBox.getWidth(), cBox.getHeight()
         // );
+    }
+
+    public void getHit(int attack) {
+        this.life -= attack;
     }
 
     public void move(int worldX, int worldY) {

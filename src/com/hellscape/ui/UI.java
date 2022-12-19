@@ -1,5 +1,6 @@
 package com.hellscape.ui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -24,9 +25,14 @@ public class UI implements Drawable {
     private BufferedImage bgTitle;
     private int bgTitleScreenX;
 
+    private BufferedImage heart;
+    private Color healthBarColor;
+    private final int healthBarWidth = 64;
+
     public UI(GamePanel gp) {
         this.gp = gp;
         this.shaderColor = new Color(0, 0, 0, 0.5F);
+        this.healthBarColor = new Color(204, 62, 85);
 
         int y = 7*gp.tileSize/2;
         this.playButton = new Button(gp, "PLAY",(gp.screenWidth-gp.tileSize)/2, y, gp.tileSize, gp.tileSize/4);
@@ -38,6 +44,7 @@ public class UI implements Drawable {
         try {
             this.maruMonica = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/font/MaruMonica.ttf"));
             this.bgTitle = ImageIO.read(getClass().getResourceAsStream("/state/title/background.png"));
+            this.heart = ImageIO.read(getClass().getResourceAsStream("/decoration/heart.png"));
         } catch (FontFormatException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -45,9 +52,14 @@ public class UI implements Drawable {
         }
 
         BufferedImage resizedBgTitle = new BufferedImage(2*gp.screenWidth, gp.screenHeight, bgTitle.getType());
-        Graphics2D g = resizedBgTitle.createGraphics();
-        g.drawImage(bgTitle, 0, 0, 2*gp.screenWidth, gp.screenHeight, null);
+        Graphics2D gBgTitle = resizedBgTitle.createGraphics();
+        gBgTitle.drawImage(bgTitle, 0, 0, 2*gp.screenWidth, gp.screenHeight, null);
         this.bgTitle = resizedBgTitle;
+
+        BufferedImage resizedHeart = new BufferedImage(gp.tileSize, gp.tileSize, heart.getType());
+        Graphics2D gHeart = resizedHeart.createGraphics();
+        gHeart.drawImage(heart, 0, 0, gp.tileSize, gp.tileSize, null);
+        this.heart = resizedHeart;
     }
 
     @Override
@@ -82,6 +94,7 @@ public class UI implements Drawable {
                 break;
             }
             case GamePanel.endState: {
+                this.drawPlayScreen(g);
                 this.drawEndScreen(g);
                 break;
             }
@@ -109,6 +122,23 @@ public class UI implements Drawable {
         int x = gp.screenWidth - 10 - (gp.world.maxWorldCol*MiniMap.unit+getLength(g, text))/2;
         int y = gp.world.maxWorldRow*MiniMap.unit + 40;
         g.drawString(text, x, y);
+
+        x = 48;
+        y = 24;
+        int width = gp.player.life*healthBarWidth/gp.player.maxLife;
+        int height = 4;
+        g.setColor(gp.getBackground());
+        g.fillRoundRect(x, y-height/2, (2+healthBarWidth)*gp.scale, (height+1)*gp.scale, height*gp.scale, height*gp.scale);
+        g.setColor(gp.getBackground().brighter());
+        g.fillRoundRect(x, y-height/2, (2+healthBarWidth)*gp.scale, (height+1)*gp.scale/2, height*gp.scale/2, height*gp.scale/2);
+        g.setColor(healthBarColor);
+        g.fillRoundRect(x, y, (2+width)*gp.scale, height*gp.scale, height*gp.scale/2, height*gp.scale/2);
+        g.setColor(healthBarColor.brighter());
+        g.fillRoundRect(x, y, (2+width)*gp.scale, height*gp.scale/2, height*gp.scale/4, height*gp.scale/4);
+        g.setColor(Color.BLACK);
+        g.setStroke(new BasicStroke(height));
+        g.drawRoundRect(x, y-height/2, (2+healthBarWidth)*gp.scale, (height+1)*gp.scale, height*gp.scale, height*gp.scale);
+        g.drawImage(heart, 0, 0, null);
     }
 
     public void drawPauseScreen(Graphics2D g) {
@@ -129,7 +159,7 @@ public class UI implements Drawable {
 
         g.setColor(Color.WHITE);
         g.setFont(g.getFont().deriveFont(Font.BOLD, 80F));
-        String text = "YOU WIN";
+        String text = (gp.player.life == 0) ? "YOU LOSE" : "YOU WIN";
         int x = (gp.screenWidth-getLength(g, text))/2;
         int y = gp.screenHeight/2;
         g.drawString(text, x, y);

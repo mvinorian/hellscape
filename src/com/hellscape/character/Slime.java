@@ -29,6 +29,8 @@ public class Slime extends Entity {
         this.hBox.setPadding(gp.tileSize/4, 3*gp.tileSize/16, 0, 3*gp.tileSize/16);
         this.cBox.setPadding(3*gp.tileSize/4, 3*gp.tileSize/16, 0, 3*gp.tileSize/16);
 
+        this.attack = 2*gp.world.floorCount;
+
         this.zPos = offCamera;
     }
 
@@ -40,6 +42,9 @@ public class Slime extends Entity {
             if (zPos == foreground) gp.foreground.remove(this);
             if (zPos == background) gp.background.remove(this);
             return;
+        }
+        if (this.state == attackState && this.frameCount == gp.refreshRate-1) {
+            gp.player.getHit(this.attack);
         }
         if (this.updateZPos() == false) return;
         if (this.updateVel() == false) return;
@@ -61,14 +66,14 @@ public class Slime extends Entity {
         int dY = gp.player.worldY - this.worldY;
 
         if (dX*dX + dY*dY < 10000) {
-            if (this.state != attack) this.frameCount = 0;
-            this.state = attack;
+            if (this.state != attackState) this.frameCount = 0;
+            this.state = attackState;
             return false;
         }
 
         if (dX > 4*gp.tileSize || dY > 2*gp.tileSize) {
-            if (this.state != idle) this.frameCount = 0;
-            this.state = idle;
+            if (this.state != idleState) this.frameCount = 0;
+            this.state = idleState;
             return false;
         }
 
@@ -101,12 +106,12 @@ public class Slime extends Entity {
         }
 
         if (isMovingX || isMovingY) {
-            if (this.state != move) this.frameCount = 0;
-            this.state = move;
+            if (this.state != moveState) this.frameCount = 0;
+            this.state = moveState;
         }
         else {
-            if (this.state != idle) this.frameCount = 0;
-            this.state = idle;
+            if (this.state != idleState) this.frameCount = 0;
+            this.state = idleState;
         }
     }
 
