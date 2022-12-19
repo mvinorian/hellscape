@@ -7,29 +7,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import com.hellscape.character.Enemy;
 import com.hellscape.util.*;
 
 public class RandomMap {
-    
     private int[][] map;
     private int width, height;
     private Point start, end;
-    private List<Enemy> enemies;
     private Random rd;
+
+    private List<Point> rooms;
 
     public RandomMap(int width, int height) {
         this.width = width;
         this.height = height;
         this.map = new int[height][width];
         this.rd = new Random();
+        this.rooms = new ArrayList<Point>();
     }
 
     public int[][] generate(int roomSize, int totalRoom) {
         List<Point> rooms = this.generateRoom(roomSize, totalRoom);
         List<Line> connections = this.generateConnection(rooms);
-        this.enemies = this.generateEnemies(rooms);
-
         
         this.start = new Point(rooms.get(0));
         this.end = new Point(rooms.get(0));
@@ -46,10 +44,9 @@ public class RandomMap {
         
         this.start.translate(0, -1);
         this.end.translate(0, -1);
-        this.start.scale(Tile.TILE_SIZE, Tile.TILE_SIZE);
-        this.end.scale(Tile.TILE_SIZE, Tile.TILE_SIZE);
         this.paint();
 
+        this.rooms = rooms;
         return this.map.clone();
     }
 
@@ -65,10 +62,10 @@ public class RandomMap {
         for (int i = 0; i < 2*totalRoom; i++) {
             rooms.add(new Point(pos.x + (int)(vX*r), pos.y + (int)(vY*r)));
             
-            double rad = -2*Math.PI/rd.nextDouble(7, 10);
+            double rad = -2*Math.PI/(7+3*rd.nextDouble());
             double rX = vX * Math.cos(rad) - vY * Math.sin(rad);
             double rY = vX * Math.sin(rad) + vY * Math.cos(rad);
-            r += rd.nextDouble(7, 10)/(2*roomSize);
+            r += (7+3*rd.nextDouble())/(2*roomSize);
             vX = rX;
             vY = rY;
         }
@@ -127,18 +124,11 @@ public class RandomMap {
                     return Double.compare(l1.getLength(), l2.getLength());
                 }
             });
-            shortest.add(lines.get(rd.nextInt(0, rooms.size()/2)));
+            shortest.add(lines.get(rd.nextInt(rooms.size()/2)));
         }
         connections.addAll(shortest.subList(0, rooms.size()/2+1));
 
         return connections;
-    }
-
-    private List<Enemy> generateEnemies(List<Point> rooms) {
-        List<Enemy> enemies = new ArrayList<Enemy>();
-        for (Point room : rooms) enemies.add(new Enemy(room.scaled(Tile.TILE_SIZE, Tile.TILE_SIZE)));
-
-        return enemies;
     }
 
     private void drawRoom(Point pos, int width, int height, int value) {
@@ -204,8 +194,8 @@ public class RandomMap {
             for (int j = 1; j < this.width-1; j++) {
                 int code = (map[i][j] & 1);
                 if ((map[i][j] & 1) == 0) {
-                    code |= (rd.nextInt(0, 16) << 1);
-                    code |= (rd.nextInt(0, 2) << 5);
+                    code |= (rd.nextInt(16) << 1);
+                    code |= (rd.nextInt(2) << 5);
                 } else {
                     if ((map[i][j-1] & 1) == 0) code |= (1<<1);
                     if ((map[i][j+1] & 1) == 0) code |= (1<<2);
@@ -230,7 +220,7 @@ public class RandomMap {
         return this.end;
     }
 
-    public List<Enemy> getEnemies() {
-        return this.enemies;
+    public List<Point> getRooms() {
+        return this.rooms;
     }
 }

@@ -1,24 +1,20 @@
 package com.hellscape;
-
 import javax.swing.JFrame;
 
-import com.hellscape.asset.AssetManager;
-import com.hellscape.control.CameraPanel;
+import com.hellscape.ui.GamePanel;
 
 public class Main {
-    
-    public static void main(String[] args) {
-        AssetManager.load();
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JFrame frame = new JFrame("Test Main");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setContentPane(new CameraPanel(1120, 640, 2));
-                frame.pack();
-                frame.setVisible(true);
-                frame.setResizable(false);
-            }
-        });
+
+    public static void main(String[] args) throws Exception {
+        JFrame window  = new JFrame("Hellscape");
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        GamePanel gp = new GamePanel();
+        window.add(gp);
+        gp.startThread();
+
+        window.pack();
+        window.setResizable(false);
+        window.setVisible(true);
     }
 }
