@@ -90,10 +90,10 @@ public class Player extends Entity {
     public void draw(Graphics2D g) {
         super.draw(g);
         int frame = frameCount * maxFrame / gp.refreshRate;
-        g.drawImage(sprite[state][direction][frame], screenX, screenY, null);
         for (int i = 0; i < projectiles.size(); i++) {
         	projectiles.get(i).draw(g);
         }
+        g.drawImage(sprite[state][direction][frame], screenX, screenY, null);
         // g.drawRect(
         //     cBox.getX() - worldX + screenX, 
         //     cBox.getY() - worldY + screenY, 

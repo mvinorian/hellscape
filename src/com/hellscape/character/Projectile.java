@@ -42,10 +42,6 @@ public class Projectile implements Drawable{
 		done = false;
 	}
 	
-	private void drawExplode() {
-		
-	}
-	
 	@Override
 	public void update() {
 		if (exploding > 0) {
@@ -53,14 +49,12 @@ public class Projectile implements Drawable{
 		}
 		if (gp.world.isCollide(cBox)) {
 			done = true;
-//			exploding++;
 			return;
 		}
 		for (Entity enemy : gp.enemies) {
 			if(enemy.isCollide(cBox)) {
 				enemy.getHit(damage);
 				done = true;
-//				exploding++;
 				return;
 			}
 		}
@@ -77,10 +71,7 @@ public class Projectile implements Drawable{
 
 	@Override
 	public void draw(Graphics2D g) {
-		if(exploding>0) {
-			drawExplode();
-			return;
-		}
+		if(done) return;
 		
 		g.drawImage(gp.player.bulletImg, screenX, screenY, null);
 //		g.drawRect(cBox.getX() - gp.player.worldX + gp.player.screenX, cBox.getY() - gp.player.worldY + gp.player.screenY, cBox.getWidth(), cBox.getHeight());
