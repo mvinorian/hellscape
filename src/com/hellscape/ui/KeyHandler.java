@@ -42,6 +42,11 @@ public class KeyHandler implements KeyListener {
                 if (gp.player.isMovingLeft) gp.player.velX = 0;
                 break;
             }
+            case KeyEvent.VK_ESCAPE: {
+                if (gp.gameState == GamePanel.playState) gp.gameState = GamePanel.pauseState;
+                else if (gp.gameState == GamePanel.pauseState) gp.gameState = GamePanel.playState;
+                break;
+            }
         }
     }
 

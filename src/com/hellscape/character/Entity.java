@@ -1,5 +1,6 @@
 package com.hellscape.character;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -29,6 +30,7 @@ public abstract class Entity implements Drawable {
     public int velX, velY;
     public int state;
     public int direction;
+    public Color shaderColor;
 
     protected int frameCount;
 
@@ -40,12 +42,23 @@ public abstract class Entity implements Drawable {
         this.state = idle;
         this.direction = faceRight;
         this.sprite = new BufferedImage[maxType][maxDirection][maxFrame];
+        this.shaderColor = new Color(0, 0, 0, 0.3F);
 
         this.worldX = 0; this.worldY = 0;
         this.velX = 0; this.velY = 0;
         this.speed = 0;
         this.cBox = new Box(0, 0, 0, 0);
         this.hBox = new Box(0, 0, 0, 0);
+    }
+
+    @Override
+    public void draw(Graphics2D g) {
+        g.setColor(shaderColor);
+        g.fillOval(
+            cBox.getX()-gp.player.worldX+gp.player.screenX, 
+            cBox.getY()+cBox.getHeight()/2-gp.player.worldY+gp.player.screenY, 
+            cBox.getWidth(), cBox.getHeight()
+        );
     }
     
     public boolean isCollide(Box box) {

@@ -25,15 +25,23 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenWidth = maxTileCol*tileSize;
     public final int screenHeight = maxTileRow*tileSize;
 
+    public static final int titleState = 0;
+    public static final int playState = 1;
+    public static final int pauseState = 2;
+    public static final int endState = 3;
+
     public final int refreshRate = 120;
 
-    private Thread thread;
+    public Thread thread;
     public KeyHandler keyH;
+    public MouseHandler mouseH;
+    public int gameState;
 
     public Player player;
     public Map world;
     public MiniMap miniMap;
     public List<Entity> enemies;
+    public UI ui;
 
     public List<Drawable> background;
     public List<Drawable> foreground;
@@ -43,20 +51,25 @@ public class GamePanel extends JPanel implements Runnable {
         this.background = new ArrayList<Drawable>();
         this.foreground = new ArrayList<Drawable>();
 
-        this.setDefault();
+        this.setupGame();
         this.setPreferredSize(new Dimension(screenWidth , screenHeight));
         this.addKeyListener(keyH);
+        this.addMouseListener(mouseH);
+        this.addMouseMotionListener(mouseH);
         this.setBackground(new Color(135, 133, 121));
         this.setFocusable(true);
     }
     
-    public void setDefault() {
+    public void setupGame() {
         this.keyH = new KeyHandler(this);
+        this.mouseH = new MouseHandler(this);
         this.world = new Map(this);
         this.world.generate();
         this.player = new Player(this);
         this.world.generateEnemies();
-        this.miniMap = new MiniMap(this, screenWidth-MiniMap.unit*world.maxWorldCol, 0);
+        this.miniMap = new MiniMap(this, screenWidth-MiniMap.unit*world.maxWorldCol-10, 10);
+        this.ui = new UI(this);
+        this.gameState = titleState;
     }
 
     public void startThread() {
@@ -84,9 +97,18 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        this.player.update();
-        this.world.update();
-        this.miniMap.update();
+        switch (gameState) {
+            case titleState: {
+                ui.update();
+                break;
+            }
+            case playState: {
+                this.player.update();
+                this.world.update();
+                this.miniMap.update();
+                break;
+            }
+        }
     }
 
     @Override
@@ -96,10 +118,18 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2d = (Graphics2D) g;
 
+        if (gameState == titleState) {
+            ui.draw(g2d);
+            g2d.dispose();
+            return;
+        }
+
         this.world.draw(g2d);
         for (Drawable obj : background) obj.draw(g2d);
         this.player.draw(g2d);
         for (Drawable obj : foreground) obj.draw(g2d);
+
+        this.ui.draw(g2d);
 
         g2d.dispose();
     }

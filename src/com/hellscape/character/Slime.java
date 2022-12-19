@@ -49,6 +49,7 @@ public class Slime extends Entity {
     @Override
     public void draw(Graphics2D g) {
         if (isDead) return;
+        super.draw(g);
         this.frameCount = (frameCount+1) % gp.refreshRate;
         int frame = frameCount * maxFrame / gp.refreshRate;
 

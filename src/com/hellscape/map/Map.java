@@ -23,6 +23,7 @@ public class Map implements Drawable {
     public final int maxWorldRow = 57;
     public final int roomSize = 5;
     public final int totalRoom = 7;
+    public final int maxFloor = 7;
 
     private GamePanel gp;
     private BufferedImage[][] sprite;
@@ -33,6 +34,7 @@ public class Map implements Drawable {
 
     public List<Point> rooms;
     public List<Entity> enemies;
+    public int floorCount = 0;
     public Door door;
 
     public Map(GamePanel gp) {
@@ -95,11 +97,6 @@ public class Map implements Drawable {
         RandomMap rm = new RandomMap(maxWorldCol, maxWorldRow);
         int[][] mapCode = rm.generate(roomSize, totalRoom);
 
-        // for (int row = 0; row < maxWorldCol; row++) {
-        // for (int col = 0; col < maxWorldRow; col++) System.out.print(mapCode[row][col] + " ");
-        // System.out.println();
-        // }
-
         for (int col = 0; col < maxWorldRow; col++)
         for (int row = 0; row < maxWorldCol; row++) {
             int spriteCol = (mapCode[row][col] & 31) >> 1;
@@ -112,6 +109,7 @@ public class Map implements Drawable {
         this.worldStart = rm.getStart();
         this.worldEnd = rm.getEnd();
         this.rooms = rm.getRooms();
+        this.floorCount++;
         if (this.door == null) this.door = new Door(gp);
         else this.door.reset();
     }

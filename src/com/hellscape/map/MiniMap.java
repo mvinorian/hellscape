@@ -1,5 +1,6 @@
 package com.hellscape.map;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -8,7 +9,7 @@ import com.hellscape.ui.GamePanel;
 
 public class MiniMap implements Drawable {
     
-    public static final int unit = 4;
+    public static final int unit = 3;
 
     private GamePanel gp;
     private int screenX, screenY;
@@ -37,6 +38,8 @@ public class MiniMap implements Drawable {
     @Override
     public void draw(Graphics2D g) {
         g.setColor(Color.WHITE);
+        g.setStroke(new BasicStroke(3));
+        g.drawRoundRect(screenX, screenY, gp.world.maxWorldCol*unit, gp.world.maxWorldRow*unit, gp.spriteSize/2, gp.spriteSize/2);
         for (int col = 0; col < gp.world.maxWorldCol; col++)
         for (int row = 0; row < gp.world.maxWorldRow; row++) {
             if (gp.world.world[row][col].isPassable == false) continue;
@@ -48,5 +51,13 @@ public class MiniMap implements Drawable {
             screenY+playerWorldRow*unit, 
             unit, unit
         );
+
+        // String floor = String.format("%d / %d F", gp.world.floorCount, gp.world.maxFloor);
+        // g.setColor(Color.WHITE);
+        // g.setFont(g.getFont().deriveFont(Font.BOLD, 24F));
+        // g.drawString(floor, 
+        //     screenX+gp.world.maxWorldCol*unit/2
+        //         -(int)g.getFontMetrics().getStringBounds(floor, g).getWidth()/2, 
+        //     screenY+gp.world.maxWorldRow*unit+30);
     }
 }
