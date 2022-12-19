@@ -14,6 +14,8 @@ import com.hellscape.util.Box;
 
 public class Player extends Entity {
 
+    public final int defaultMaxLife = 50;
+
     public final int screenX;
     public final int screenY;
 
@@ -39,7 +41,7 @@ public class Player extends Entity {
         this.cBox = new Box(worldX, worldY, gp.tileSize, gp.tileSize);
         this.cBox.setPadding(3*gp.tileSize/4, gp.tileSize/4, 0, gp.tileSize/4);
 
-        this.maxLife = 50;
+        this.maxLife = defaultMaxLife;
         this.life = maxLife;
 
         this.isMovingUp = false;
@@ -127,7 +129,7 @@ public class Player extends Entity {
         this.cBox = new Box(worldX, worldY, gp.tileSize, gp.tileSize);
         this.cBox.setPadding(3*gp.tileSize/4, gp.tileSize/4, 0, gp.tileSize/4);
 
-        this.maxLife = 100;
+        this.maxLife = defaultMaxLife;
         this.life = maxLife;
 
         this.isMovingUp = false;
