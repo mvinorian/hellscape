@@ -2,6 +2,7 @@ package com.hellscape.character;
 
 import java.awt.Graphics2D;
 
+import com.hellscape.sound.Sound;
 import com.hellscape.ui.GamePanel;
 import com.hellscape.util.Box;
 

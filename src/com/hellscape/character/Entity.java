@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.hellscape.sound.Sound;
 import com.hellscape.ui.Drawable;
 import com.hellscape.ui.GamePanel;
 import com.hellscape.util.Box;
@@ -71,6 +72,10 @@ public abstract class Entity implements Drawable {
     
     public boolean isCollide(Box box) {
         return this.cBox.isCollide(box);
+    }
+    
+    public void getHit(int attack) {
+        this.life -= attack;
     }
 
     protected void translate(int dX, int dY) {

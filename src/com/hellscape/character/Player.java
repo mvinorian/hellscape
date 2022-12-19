@@ -1,6 +1,12 @@
 package com.hellscape.character;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import com.hellscape.sound.Sound;
 import com.hellscape.ui.*;
@@ -15,6 +21,9 @@ public class Player extends Entity {
     public boolean isMovingDown;
     public boolean isMovingLeft;
     public boolean isMovingRight;
+    public BufferedImage bulletImg;
+    public List<Projectile> projectiles;
+    public int projectileCount;
 
     public Player(GamePanel gp) {
         super(gp);
@@ -36,9 +45,14 @@ public class Player extends Entity {
         this.isMovingDown = false;
         this.isMovingLeft = false;
         this.isMovingRight = false;
+        
+        this.projectiles = new ArrayList<Projectile>();
+        this.projectileCount = 0;
+        
+        this.loadProjectile();
     }
-    
-    @Override
+
+	@Override
     public void update() {
         this.frameCount = (frameCount+1) % gp.refreshRate;
         if (this.life == 0) {
@@ -56,6 +70,16 @@ public class Player extends Entity {
 
         this.translate(0, velY);
         if (gp.world.isCollide(cBox) == true) this.translate(0, -velY);
+        
+        updateAttack();
+        
+        for (int i = 0; i < projectiles.size(); i++) {
+        	if(projectiles.get(i).done) {
+        		projectiles.remove(i);
+        		continue;
+        	}
+        	projectiles.get(i).update();
+        }
     }
 
     @Override
@@ -63,6 +87,9 @@ public class Player extends Entity {
         super.draw(g);
         int frame = frameCount * maxFrame / gp.refreshRate;
         g.drawImage(sprite[state][direction][frame], screenX, screenY, null);
+        for (int i = 0; i < projectiles.size(); i++) {
+        	projectiles.get(i).draw(g);
+        }
         // g.drawRect(
         //     cBox.getX() - worldX + screenX, 
         //     cBox.getY() - worldY + screenY, 
@@ -102,4 +129,24 @@ public class Player extends Entity {
         this.isMovingLeft = false;
         this.isMovingRight = false;
     }
+    
+    private void updateAttack() {
+    	if (gp.mouseH.mousePressed == false) return;
+    	projectiles.add(new Projectile(gp));
+    }
+    
+    private void loadProjectile() {
+    	try {
+			bulletImg = ImageIO.read(getClass().getResourceAsStream("/projectile/BulletPrototype.png"));
+			BufferedImage resizedBullet = new BufferedImage(6*gp.scale, 6*gp.scale, bulletImg.getType());
+            Graphics2D g = resizedBullet.createGraphics();
+            g.drawImage(bulletImg, 0, 0, 6*gp.scale, 6*gp.scale, null);
+            bulletImg = resizedBullet;
+            g.dispose();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+    	
+	}
 }
