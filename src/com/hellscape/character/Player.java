@@ -2,6 +2,7 @@ package com.hellscape.character;
 
 import java.awt.Graphics2D;
 
+import com.hellscape.sound.Sound;
 import com.hellscape.ui.*;
 import com.hellscape.util.Box;
 
@@ -71,6 +72,7 @@ public class Player extends Entity {
 
     public void getHit(int attack) {
         this.life -= attack;
+        gp.sfx.play(Sound.sfxGetHit);
     }
 
     public void setPosition() {
