@@ -14,7 +14,7 @@ public abstract class State implements Drawable {
     
     protected State(GamePanel gp) {
         this.gp = gp;
-        this.shaderColor = new Color(0, 0, 0, 0.5F);
+        this.shaderColor = new Color(0, 0, 0, 0.3F);
     }
 
     protected void drawShadedText(Graphics2D g, String text, int x, int y, int offsetX, int offsetY) {

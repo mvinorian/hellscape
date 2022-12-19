@@ -34,14 +34,18 @@ public class UI implements Drawable {
     @Override
     public void update() {
         switch (gp.gameState) {
-            case GamePanel.titleState: {
-                states[GamePanel.titleState].update();
-                break;
-            }
-            case GamePanel.pauseState: {
-                states[GamePanel.pauseState].update();
-                break;
-            }
+        case GamePanel.titleState: {
+            states[GamePanel.titleState].update();
+            break;
+        }
+        case GamePanel.pauseState: {
+            states[GamePanel.pauseState].update();
+            break;
+        }
+        case GamePanel.endState: {
+            states[GamePanel.endState].update();
+            break;
+        }
         }
     }
 
@@ -51,24 +55,24 @@ public class UI implements Drawable {
         g.setColor(Color.WHITE);
 
         switch (gp.gameState) {
-            case GamePanel.titleState: {
-                states[GamePanel.titleState].draw(g);
-                break;
-            }
-            case GamePanel.playState: {
-                states[GamePanel.playState].draw(g);
-                break;
-            }
-            case GamePanel.pauseState: {
-                states[GamePanel.playState].draw(g);
-                states[GamePanel.pauseState].draw(g);
-                break;
-            }
-            case GamePanel.endState: {
-                states[GamePanel.playState].draw(g);
-                states[GamePanel.endState].draw(g);
-                break;
-            }
+        case GamePanel.titleState: {
+            states[GamePanel.titleState].draw(g);
+            break;
+        }
+        case GamePanel.playState: {
+            states[GamePanel.playState].draw(g);
+            break;
+        }
+        case GamePanel.pauseState: {
+            states[GamePanel.playState].draw(g);
+            states[GamePanel.pauseState].draw(g);
+            break;
+        }
+        case GamePanel.endState: {
+            states[GamePanel.playState].draw(g);
+            states[GamePanel.endState].draw(g);
+            break;
+        }
         }
     }
 

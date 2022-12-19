@@ -16,37 +16,45 @@ public class KeyHandler implements KeyListener {
         int key = e.getKeyCode();
 
         switch (key) {
-            case KeyEvent.VK_W: {
+        case KeyEvent.VK_W: {
+            if (gp.gameState == GamePanel.playState) {
                 gp.player.velY = -gp.player.speed;
                 gp.player.isMovingUp = true;
                 if (gp.player.isMovingDown) gp.player.velY = 0;
-                break;
             }
-            case KeyEvent.VK_S: {
+            break;
+        }
+        case KeyEvent.VK_S: {
+            if (gp.gameState == GamePanel.playState) {
                 gp.player.velY = gp.player.speed;
                 gp.player.isMovingDown = true;
                 if (gp.player.isMovingUp) gp.player.velY = 0;
-                break;
             }
-            case KeyEvent.VK_A: {
+            break;
+        }
+        case KeyEvent.VK_A: {
+            if (gp.gameState == GamePanel.playState) {
                 gp.player.velX = -gp.player.speed;
                 gp.player.direction = gp.player.faceLeft;
                 gp.player.isMovingLeft = true;
                 if (gp.player.isMovingRight) gp.player.velX = 0;
-                break;
             }
-            case KeyEvent.VK_D: {
+            break;
+        }
+        case KeyEvent.VK_D: {
+            if (gp.gameState == GamePanel.playState) {
                 gp.player.velX = gp.player.speed;
                 gp.player.direction = gp.player.faceRight;
                 gp.player.isMovingRight = true;
                 if (gp.player.isMovingLeft) gp.player.velX = 0;
-                break;
             }
-            case KeyEvent.VK_ESCAPE: {
-                if (gp.gameState == GamePanel.playState) gp.gameState = GamePanel.pauseState;
-                else if (gp.gameState == GamePanel.pauseState) gp.gameState = GamePanel.playState;
-                break;
-            }
+            break;
+        }
+        case KeyEvent.VK_ESCAPE: {
+            if (gp.gameState == GamePanel.playState) gp.gameState = GamePanel.pauseState;
+            else if (gp.gameState == GamePanel.pauseState) gp.gameState = GamePanel.playState;
+            break;
+        }
         }
     }
 
@@ -55,36 +63,44 @@ public class KeyHandler implements KeyListener {
         int key = e.getKeyCode();
 
         switch (key) {
-            case KeyEvent.VK_W: {
+        case KeyEvent.VK_W: {
+            if (gp.gameState == GamePanel.playState) {
                 gp.player.velY = 0;
                 gp.player.isMovingUp = false;
                 if (gp.player.isMovingDown) gp.player.velY = gp.player.speed;
-                break;
             }
-            case KeyEvent.VK_S: {
+            break;
+        }
+        case KeyEvent.VK_S: {
+            if (gp.gameState == GamePanel.playState) {
                 gp.player.velY = 0;
                 gp.player.isMovingDown = false;
                 if (gp.player.isMovingUp) gp.player.velY = -gp.player.speed;
-                break;
             }
-            case KeyEvent.VK_A: {
+            break;
+        }
+        case KeyEvent.VK_A: {
+            if (gp.gameState == GamePanel.playState) {
                 gp.player.velX = 0;
                 gp.player.isMovingLeft = false;
                 if (gp.player.isMovingRight) {
                     gp.player.direction = gp.player.faceRight;
                     gp.player.velX = gp.player.speed;
                 }
-                break;
             }
-            case KeyEvent.VK_D: {
+            break;
+        }
+        case KeyEvent.VK_D: {
+            if (gp.gameState == GamePanel.playState) {
                 gp.player.velX = 0;
                 gp.player.isMovingRight = false;
                 if (gp.player.isMovingLeft) {
                     gp.player.direction = gp.player.faceLeft;
                     gp.player.velX = -gp.player.speed;
                 }
-                break;
             }
+            break;
+        }
         }
     }
 

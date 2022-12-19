@@ -43,6 +43,7 @@ public class Slime extends Entity {
             if (zPos == background) gp.background.remove(this);
             return;
         }
+        this.frameCount = (frameCount+1) % gp.refreshRate;
         if (this.state == attackState && this.frameCount == gp.refreshRate-1) {
             gp.player.getHit(this.attack);
         }
@@ -55,7 +56,6 @@ public class Slime extends Entity {
     public void draw(Graphics2D g) {
         if (isDead) return;
         super.draw(g);
-        if (gp.gameState != GamePanel.pauseState) this.frameCount = (frameCount+1) % gp.refreshRate;
         int frame = frameCount * maxFrame / gp.refreshRate;
 
         g.drawImage(sprite[state][direction][frame], screenX, screenY, null);

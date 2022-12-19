@@ -39,6 +39,7 @@ public class Player extends Entity {
     
     @Override
     public void update() {
+        this.frameCount = (frameCount+1) % gp.refreshRate;
         if (this.life == 0) {
             gp.gameState = GamePanel.endState;
         }
@@ -59,7 +60,6 @@ public class Player extends Entity {
     @Override
     public void draw(Graphics2D g) {
         super.draw(g);
-        if (gp.gameState != GamePanel.pauseState) this.frameCount = (frameCount+1) % gp.refreshRate;
         int frame = frameCount * maxFrame / gp.refreshRate;
         g.drawImage(sprite[state][direction][frame], screenX, screenY, null);
         // g.drawRect(

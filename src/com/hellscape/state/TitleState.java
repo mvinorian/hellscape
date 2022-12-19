@@ -48,6 +48,7 @@ public class TitleState extends State {
 
     @Override
     public void update() {
+        playerIcon.update();
         playButton.update();
         quitButton.update();
         if (playButton.state == Button.submitted) gp.gameState = GamePanel.playState;
