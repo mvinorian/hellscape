@@ -18,8 +18,6 @@ public class Slime extends Entity {
     private BasicStroke healthBarStroke;
     private int zPos;
     
-    public boolean isDead;
-    
     public Slime(GamePanel gp, int worldX, int worldY) {
         super(gp);
         this.loadSprite("/enemy/slime");
@@ -36,7 +34,7 @@ public class Slime extends Entity {
         this.cBox.setPadding(3*gp.tileSize/4, 3*gp.tileSize/16, 0, 3*gp.tileSize/16);
 
         this.maxLife = 10*gp.world.floorCount;
-        this.life = 8;
+        this.life = maxLife;
         this.attack = 2*gp.world.floorCount;
 
         this.zPos = offCamera;
@@ -44,8 +42,7 @@ public class Slime extends Entity {
 
     @Override
     public void update() {
-        if (gp.player.isCollide(hBox)) {
-            isDead = true;
+        if (isDead() == true) {
             if (zPos != offCamera) gp.enemies.remove(this);
             if (zPos == foreground) gp.foreground.remove(this);
             if (zPos == background) gp.background.remove(this);
@@ -62,12 +59,16 @@ public class Slime extends Entity {
 
     @Override
     public void draw(Graphics2D g) {
-        if (isDead) return;
+        if (isDead() == true) return;
         super.draw(g);
         int frame = frameCount * maxFrame / gp.refreshRate;
 
         this.drawHealthBar(g);
         g.drawImage(sprite[state][direction][frame], screenX, screenY, null);
+    }
+
+    public boolean isDead() {
+        return this.life <= 0;
     }
 
     private void drawHealthBar(Graphics2D g) {

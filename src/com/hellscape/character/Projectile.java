@@ -52,7 +52,7 @@ public class Projectile implements Drawable{
 			return;
 		}
 		for (Entity enemy : gp.enemies) {
-			if(enemy.isCollide(cBox)) {
+			if(enemy.isHit(cBox)) {
 				enemy.getHit(damage);
 				done = true;
 				return;

@@ -49,7 +49,7 @@ public class Map implements Drawable {
     public void update() {
         for (int i = 0; i < enemies.size(); i++) {
             Slime enemy = (Slime)enemies.get(i);
-            if (enemy.isDead == false) enemy.update();
+            if (enemy.isDead() == false) enemy.update();
             else {
                 enemies.remove(enemy);
                 i--;
