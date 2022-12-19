@@ -21,6 +21,7 @@ public class Button implements Drawable {
     private String text;
     private Color bgColor;
     private Color shaderColor;
+    private BasicStroke stroke;
 
     public int state;
 
@@ -35,6 +36,7 @@ public class Button implements Drawable {
         // this.bgColor = new Color(135, 133, 121);
         this.bgColor = new Color(114, 117, 27);
         this.shaderColor = new Color(0, 0, 0, 0.25F);
+        this.stroke = new BasicStroke(gp.scale);
     }
 
     @Override
@@ -52,7 +54,7 @@ public class Button implements Drawable {
 
     @Override
     public void draw(Graphics2D g) {
-        g.setStroke(new BasicStroke(3));
+        g.setStroke(stroke);
         g.setColor(shaderColor);
         g.drawRoundRect(screenX+2, screenY+2, width, height, 5, 5);
         
