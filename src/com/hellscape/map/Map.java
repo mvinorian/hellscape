@@ -117,6 +117,10 @@ public class Map implements Drawable {
         for (Point room : rooms) {
             room.scale(gp.tileSize, gp.tileSize);
             this.enemies.add(new Slime(gp, room.x, room.y));
+            this.enemies.add(new Slime(gp, room.x + gp.tileSize, room.y));
+            this.enemies.add(new Slime(gp, room.x - gp.tileSize, room.y));
+            this.enemies.add(new Slime(gp, room.x, room.y + gp.tileSize));
+            this.enemies.add(new Slime(gp, room.x, room.y - gp.tileSize));
         }
     }
 
