@@ -16,11 +16,13 @@ public class PlayState extends State {
 
     private BufferedImage heart;
     private Color healthBarColor;
+    private BasicStroke healthBarStroke;
     private final int healthBarWidth = 64;
 
     public PlayState(GamePanel gp) {
         super(gp);
         this.healthBarColor = new Color(204, 63, 85);
+        this.healthBarStroke = new BasicStroke(gp.scale);
         
         try {
             this.heart = ImageIO.read(getClass().getResourceAsStream("/decoration/heart.png"));
@@ -59,7 +61,7 @@ public class PlayState extends State {
         g.setColor(healthBarColor.brighter());
         g.fillRoundRect(x, y, (2+width)*gp.scale, height*gp.scale/2, height*gp.scale/4, height*gp.scale/4);
         g.setColor(Color.BLACK);
-        g.setStroke(new BasicStroke(height));
+        g.setStroke(healthBarStroke);
         g.drawRoundRect(x, y-height/2, (2+healthBarWidth)*gp.scale, (height+1)*gp.scale, height*gp.scale, height*gp.scale);
         g.drawImage(heart, 0, 0, null);
     }

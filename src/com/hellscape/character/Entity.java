@@ -73,6 +73,14 @@ public abstract class Entity implements Drawable {
         return this.cBox.isCollide(box);
     }
 
+    public boolean isHit(Box box) {
+        return this.hBox.isCollide(box);
+    }
+    
+    public void getHit(int attack) {
+        this.life -= attack;
+    }
+
     protected void translate(int dX, int dY) {
         this.worldX += dX;
         this.worldY += dY;

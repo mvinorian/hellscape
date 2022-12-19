@@ -1,7 +1,14 @@
 package com.hellscape.character;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.imageio.ImageIO;
+
+import com.hellscape.sound.Sound;
 import com.hellscape.ui.*;
 import com.hellscape.util.Box;
 
@@ -14,10 +21,14 @@ public class Player extends Entity {
     public boolean isMovingDown;
     public boolean isMovingLeft;
     public boolean isMovingRight;
+    public BufferedImage bulletImg;
+    public List<Projectile> projectiles;
+    public int projectileCount;
+    private int cdCount = 0;
 
     public Player(GamePanel gp) {
         super(gp);
-        this.loadSprite("/player/assasin");
+        this.loadSprite("/player/shooter");
         this.screenX = (gp.screenWidth - gp.tileSize)/2;
         this.screenY = (gp.screenHeight - gp.tileSize)/2;
 
@@ -28,20 +39,27 @@ public class Player extends Entity {
         this.cBox = new Box(worldX, worldY, gp.tileSize, gp.tileSize);
         this.cBox.setPadding(3*gp.tileSize/4, gp.tileSize/4, 0, gp.tileSize/4);
 
-        this.maxLife = 100;
+        this.maxLife = 50;
         this.life = maxLife;
 
         this.isMovingUp = false;
         this.isMovingDown = false;
         this.isMovingLeft = false;
         this.isMovingRight = false;
+        
+        this.projectiles = new ArrayList<Projectile>();
+        this.projectileCount = 0;
+        
+        this.loadProjectile();
     }
-    
-    @Override
+
+	@Override
     public void update() {
         this.frameCount = (frameCount+1) % gp.refreshRate;
-        if (this.life == 0) {
+        if (this.life <= 0) {
             gp.gameState = GamePanel.endState;
+            gp.sfx.play(Sound.sfxGameOver);
+            gp.bgm.stop();
         }
         if (velX == 0 && velY == 0) {
             if (this.state != idleState) this.frameCount = 0;
@@ -55,12 +73,28 @@ public class Player extends Entity {
 
         this.translate(0, velY);
         if (gp.world.isCollide(cBox) == true) this.translate(0, -velY);
+        
+        if (gp.gameState == GamePanel.playState) updateAttack();
+        
+        if(cdCount > 0) cdCount--;
+        
+        for (int i = 0; i < projectiles.size(); i++) {
+        	if(projectiles.get(i).done) {
+        		projectiles.remove(i);
+        		continue;
+        	}
+        	projectiles.get(i).update();
+        }
+        
     }
 
     @Override
     public void draw(Graphics2D g) {
         super.draw(g);
         int frame = frameCount * maxFrame / gp.refreshRate;
+        for (int i = 0; i < projectiles.size(); i++) {
+        	projectiles.get(i).draw(g);
+        }
         g.drawImage(sprite[state][direction][frame], screenX, screenY, null);
         // g.drawRect(
         //     cBox.getX() - worldX + screenX, 
@@ -71,6 +105,7 @@ public class Player extends Entity {
 
     public void getHit(int attack) {
         this.life -= attack;
+        gp.sfx.play(Sound.sfxGetHit);
     }
 
     public void setPosition() {
@@ -100,4 +135,24 @@ public class Player extends Entity {
         this.isMovingLeft = false;
         this.isMovingRight = false;
     }
+    
+    private void updateAttack() {
+    	if (gp.mouseH.mousePressed == false) return;
+    	if (cdCount > 0) return;
+    	projectiles.add(new Projectile(gp));
+    	cdCount = 60;
+    }
+    
+    private void loadProjectile() {
+    	try {
+			bulletImg = ImageIO.read(getClass().getResourceAsStream("/projectile/BulletPrototype.png"));
+			BufferedImage resizedBullet = new BufferedImage(6*gp.scale, 6*gp.scale, bulletImg.getType());
+            Graphics2D g = resizedBullet.createGraphics();
+            g.drawImage(bulletImg, 0, 0, 6*gp.scale, 6*gp.scale, null);
+            bulletImg = resizedBullet;
+            g.dispose();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

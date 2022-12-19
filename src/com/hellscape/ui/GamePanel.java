@@ -13,6 +13,7 @@ import com.hellscape.character.Entity;
 import com.hellscape.character.Player;
 import com.hellscape.map.Map;
 import com.hellscape.map.MiniMap;
+import com.hellscape.sound.Sound;
 
 public class GamePanel extends JPanel implements Runnable {
     
@@ -42,17 +43,22 @@ public class GamePanel extends JPanel implements Runnable {
     public Map world;
     public MiniMap miniMap;
     public List<Entity> enemies;
+
     public UI ui;
+    public Sound bgm;
+    public Sound sfx;
 
     public List<Drawable> background;
     public List<Drawable> foreground;
 
     public GamePanel() {
-        this.setPreferredSize(new Dimension(screenWidth , screenHeight));
+        this.bgm = new Sound();
+        this.sfx = new Sound();
         this.setupGame();
-
+        
         this.keyH = new KeyHandler(this);
         this.mouseH = new MouseHandler(this);
+        this.setPreferredSize(new Dimension(screenWidth , screenHeight));
         this.addKeyListener(keyH);
         this.addMouseListener(mouseH);
         this.addMouseMotionListener(mouseH);
@@ -72,6 +78,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.miniMap = new MiniMap(this, screenWidth-MiniMap.unit*world.maxWorldCol-10, 10);
         this.ui = new UI(this);
         this.gameState = titleState;
+        this.bgm.playLoop(Sound.bgmTitle);
     }
 
     public void startThread() {
@@ -146,5 +153,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.miniMap.reset();
         this.ui.reset();
         this.gameState = titleState;
+        this.bgm.playLoop(Sound.bgmTitle);
     }
 }

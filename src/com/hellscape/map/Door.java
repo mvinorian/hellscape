@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.hellscape.sound.Sound;
 import com.hellscape.ui.Drawable;
 import com.hellscape.ui.GamePanel;
 import com.hellscape.util.Box;
@@ -51,7 +52,11 @@ public class Door implements Drawable {
     public void update() {
         this.updateZPos();
         if (state == open && gp.player.isCollide(cBox)) {
-            if (gp.world.floorCount == gp.world.maxFloor) gp.gameState = GamePanel.endState;
+            if (gp.world.floorCount == gp.world.maxFloor) {
+                gp.gameState = GamePanel.endState;
+                gp.sfx.play(Sound.sfxWin);
+                gp.bgm.stop();
+            }
             else gp.nextFloor();
             return;
         }

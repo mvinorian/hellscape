@@ -23,7 +23,7 @@ public class Map implements Drawable {
     public final int maxWorldRow = 57;
     public final int roomSize = 5;
     public final int totalRoom = 7;
-    public final int maxFloor = 1;
+    public final int maxFloor = 3;
 
     private GamePanel gp;
     private BufferedImage[][] sprite;
@@ -49,8 +49,8 @@ public class Map implements Drawable {
     public void update() {
         for (int i = 0; i < enemies.size(); i++) {
             Slime enemy = (Slime)enemies.get(i);
-            if (enemy.isDead == false) enemy.update();
-            else {
+            enemy.update();
+            if (enemy.isDead() == true) {
                 enemies.remove(enemy);
                 i--;
             }
@@ -117,11 +117,16 @@ public class Map implements Drawable {
         for (Point room : rooms) {
             room.scale(gp.tileSize, gp.tileSize);
             this.enemies.add(new Slime(gp, room.x, room.y));
+            this.enemies.add(new Slime(gp, room.x + gp.tileSize, room.y));
+            this.enemies.add(new Slime(gp, room.x - gp.tileSize, room.y));
+            this.enemies.add(new Slime(gp, room.x, room.y + gp.tileSize));
+            this.enemies.add(new Slime(gp, room.x, room.y - gp.tileSize));
         }
     }
 
     public void reset() {
         this.enemies.clear();
+        this.floorCount = 1;
     }
 
     private void loadSprite(String path) {

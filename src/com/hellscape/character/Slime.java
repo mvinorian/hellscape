@@ -1,7 +1,10 @@
 package com.hellscape.character;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 
+import com.hellscape.sound.Sound;
 import com.hellscape.ui.GamePanel;
 import com.hellscape.util.Box;
 
@@ -12,13 +15,15 @@ public class Slime extends Entity {
     private final int foreground = 2;
 
     private int screenX, screenY;
+    private Color healthBarColor;
+    private BasicStroke healthBarStroke;
     private int zPos;
-    
-    public boolean isDead;
     
     public Slime(GamePanel gp, int worldX, int worldY) {
         super(gp);
         this.loadSprite("/enemy/slime");
+        this.healthBarColor = new Color(204, 63, 85);
+        this.healthBarStroke = new BasicStroke(gp.scale);
 
         this.worldX = worldX;
         this.worldY = worldY;
@@ -29,6 +34,8 @@ public class Slime extends Entity {
         this.hBox.setPadding(gp.tileSize/4, 3*gp.tileSize/16, 0, 3*gp.tileSize/16);
         this.cBox.setPadding(3*gp.tileSize/4, 3*gp.tileSize/16, 0, 3*gp.tileSize/16);
 
+        this.maxLife = 10*gp.world.floorCount;
+        this.life = maxLife;
         this.attack = 2*gp.world.floorCount;
 
         this.zPos = offCamera;
@@ -36,8 +43,7 @@ public class Slime extends Entity {
 
     @Override
     public void update() {
-        if (gp.player.isCollide(hBox)) {
-            isDead = true;
+        if (isDead() == true) {
             if (zPos != offCamera) gp.enemies.remove(this);
             if (zPos == foreground) gp.foreground.remove(this);
             if (zPos == background) gp.background.remove(this);
@@ -54,11 +60,36 @@ public class Slime extends Entity {
 
     @Override
     public void draw(Graphics2D g) {
-        if (isDead) return;
+        if (isDead() == true) return;
         super.draw(g);
         int frame = frameCount * maxFrame / gp.refreshRate;
 
+        this.drawHealthBar(g);
         g.drawImage(sprite[state][direction][frame], screenX, screenY, null);
+    }
+
+    public boolean isDead() {
+        return this.life <= 0;
+    }
+
+    public void getHit(int attack) {
+        this.life -= attack;
+        gp.sfx.play(Sound.sfxHitMonster);
+    }
+
+    private void drawHealthBar(Graphics2D g) {
+        int width = life*(gp.tileSize/2)/maxLife;
+        int height = 3*gp.scale;
+        int x = screenX + gp.tileSize/4;
+        int y = screenY;
+
+        g.setColor(healthBarColor);
+        g.fillRect(x, y, width, height);
+        g.setColor(healthBarColor.brighter());
+        g.fillRect(x, y, width, height/2);
+        g.setColor(Color.BLACK);
+        g.setStroke(healthBarStroke);
+        g.drawRect(x, y, gp.tileSize/2, height);
     }
 
     private boolean updateVel() {
