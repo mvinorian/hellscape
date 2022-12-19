@@ -58,6 +58,8 @@ public class Player extends Entity {
         this.frameCount = (frameCount+1) % gp.refreshRate;
         if (this.life == 0) {
             gp.gameState = GamePanel.endState;
+            gp.sfx.play(Sound.sfxGameOver);
+            gp.bgm.stop();
         }
         if (velX == 0 && velY == 0) {
             if (this.state != idleState) this.frameCount = 0;

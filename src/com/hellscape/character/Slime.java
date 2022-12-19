@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import com.hellscape.sound.Sound;
 import com.hellscape.ui.GamePanel;
 import com.hellscape.util.Box;
 
@@ -69,6 +70,11 @@ public class Slime extends Entity {
 
     public boolean isDead() {
         return this.life <= 0;
+    }
+
+    public void getHit(int attack) {
+        this.life -= attack;
+        gp.sfx.play(Sound.sfxHitMonster);
     }
 
     private void drawHealthBar(Graphics2D g) {
