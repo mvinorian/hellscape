@@ -24,6 +24,7 @@ public class Player extends Entity {
     public BufferedImage bulletImg;
     public List<Projectile> projectiles;
     public int projectileCount;
+    private int cdCount = 0;
 
     public Player(GamePanel gp) {
         super(gp);
@@ -73,6 +74,8 @@ public class Player extends Entity {
         
         updateAttack();
         
+        if(cdCount > 0) cdCount--;
+        
         for (int i = 0; i < projectiles.size(); i++) {
         	if(projectiles.get(i).done) {
         		projectiles.remove(i);
@@ -80,6 +83,7 @@ public class Player extends Entity {
         	}
         	projectiles.get(i).update();
         }
+        
     }
 
     @Override
@@ -132,7 +136,9 @@ public class Player extends Entity {
     
     private void updateAttack() {
     	if (gp.mouseH.mousePressed == false) return;
+    	if (cdCount > 0) return;
     	projectiles.add(new Projectile(gp));
+    	cdCount = 60;
     }
     
     private void loadProjectile() {
