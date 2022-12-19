@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.hellscape.character.Player;
+import com.hellscape.sound.Sound;
 import com.hellscape.ui.Button;
 import com.hellscape.ui.GamePanel;
 
@@ -51,7 +52,10 @@ public class TitleState extends State {
         playerIcon.update();
         playButton.update();
         quitButton.update();
-        if (playButton.state == Button.submitted) gp.gameState = GamePanel.playState;
+        if (playButton.state == Button.submitted) {
+            gp.gameState = GamePanel.playState;
+            gp.bgm.playLoop(Sound.bgmBattle);
+        }
         if (quitButton.state == Button.submitted) System.exit(0);
     }
 
