@@ -27,7 +27,7 @@ public class Player extends Entity {
 
     public Player(GamePanel gp) {
         super(gp);
-        this.loadSprite("/player/assasin");
+        this.loadSprite("/player/shooter");
         this.screenX = (gp.screenWidth - gp.tileSize)/2;
         this.screenY = (gp.screenHeight - gp.tileSize)/2;
 
