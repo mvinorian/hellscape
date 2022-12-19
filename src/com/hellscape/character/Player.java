@@ -39,7 +39,7 @@ public class Player extends Entity {
         this.cBox = new Box(worldX, worldY, gp.tileSize, gp.tileSize);
         this.cBox.setPadding(3*gp.tileSize/4, gp.tileSize/4, 0, gp.tileSize/4);
 
-        this.maxLife = 100;
+        this.maxLife = 50;
         this.life = maxLife;
 
         this.isMovingUp = false;
@@ -56,7 +56,7 @@ public class Player extends Entity {
 	@Override
     public void update() {
         this.frameCount = (frameCount+1) % gp.refreshRate;
-        if (this.life == 0) {
+        if (this.life <= 0) {
             gp.gameState = GamePanel.endState;
             gp.sfx.play(Sound.sfxGameOver);
             gp.bgm.stop();
@@ -74,7 +74,7 @@ public class Player extends Entity {
         this.translate(0, velY);
         if (gp.world.isCollide(cBox) == true) this.translate(0, -velY);
         
-        updateAttack();
+        if (gp.gameState == GamePanel.playState) updateAttack();
         
         if(cdCount > 0) cdCount--;
         
@@ -154,7 +154,5 @@ public class Player extends Entity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    	
-    	
 	}
 }
