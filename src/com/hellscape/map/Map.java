@@ -23,7 +23,7 @@ public class Map implements Drawable {
     public final int maxWorldRow = 57;
     public final int roomSize = 5;
     public final int totalRoom = 7;
-    public final int maxFloor = 7;
+    public final int maxFloor = 1;
 
     private GamePanel gp;
     private BufferedImage[][] sprite;

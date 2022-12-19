@@ -33,7 +33,7 @@ public class MiniMap implements Drawable {
     @Override
     public void draw(Graphics2D g) {
         g.setColor(Color.WHITE);
-        g.setStroke(new BasicStroke(3));
+        g.setStroke(new BasicStroke(4));
         g.drawRoundRect(screenX, screenY, gp.world.maxWorldCol*unit, gp.world.maxWorldRow*unit, gp.spriteSize/2, gp.spriteSize/2);
         for (int col = 0; col < gp.world.maxWorldCol; col++)
         for (int row = 0; row < gp.world.maxWorldRow; row++) {

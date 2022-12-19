@@ -32,7 +32,7 @@ public class PauseState extends State {
         this.quitButton = new Button(gp, "QUIT", x, y+=yOffset, width, height);
 
         try {
-            this.bg = ImageIO.read(getClass().getResourceAsStream("/state/pause/background.png"));
+            this.bg = ImageIO.read(getClass().getResourceAsStream("/state/menu/background.png"));
             BufferedImage resizedBg = new BufferedImage(gp.screenWidth, gp.screenHeight, bg.getType());
             Graphics2D g = resizedBg.createGraphics();
             g.drawImage(bg, 0, 0, gp.screenWidth, gp.screenHeight, null);
