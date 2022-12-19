@@ -83,6 +83,6 @@ public class Projectile implements Drawable{
 		}
 		
 		g.drawImage(gp.player.bulletImg, screenX, screenY, null);
-		g.drawRect(cBox.getX() - gp.player.worldX + gp.player.screenX, cBox.getY() - gp.player.worldY + gp.player.screenY, cBox.getWidth(), cBox.getHeight());
+//		g.drawRect(cBox.getX() - gp.player.worldX + gp.player.screenX, cBox.getY() - gp.player.worldY + gp.player.screenY, cBox.getWidth(), cBox.getHeight());
 	}
 }
