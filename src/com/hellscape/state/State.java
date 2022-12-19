@@ -28,4 +28,6 @@ public abstract class State implements Drawable {
     protected int getLength(Graphics2D g, String text) {
         return (int)g.getFontMetrics().getStringBounds(text, g).getWidth();
     }
+
+    public void reset() {}
 }

@@ -17,27 +17,33 @@ public class TitleState extends State {
     private Button quitButton;
     private Player playerIcon;
 
-    private BufferedImage bgTitle;
-    private int bgTitleScreenX;
+    private BufferedImage bg;
+    private int bgScreenX;
 
     public TitleState(GamePanel gp) {
         super(gp);
-        int y = 7*gp.tileSize/2;
-        this.playButton = new Button(gp, "PLAY",(gp.screenWidth-gp.tileSize)/2, y, gp.tileSize, gp.tileSize/4);
-        this.quitButton = new Button(gp, "QUIT",(gp.screenWidth-gp.tileSize)/2, y+gp.tileSize/3, gp.tileSize, gp.tileSize/4);
+
+        int width = 3*gp.tileSize/2;
+        int height = gp.tileSize/4;
+        int x = (gp.screenWidth-width)/2;
+        int y = 13*gp.tileSize/4;
+        int yOffset = 3*height/2;
+        
+        this.playButton = new Button(gp, "PLAY", x, y+=yOffset, width, height);
+        this.quitButton = new Button(gp, "QUIT", x, y+=yOffset, width, height);
         this.playerIcon = new Player(gp);
-        this.bgTitleScreenX = 0;
+        this.bgScreenX = 0;
 
         try {
-            this.bgTitle = ImageIO.read(getClass().getResourceAsStream("/state/title/background.png"));
-            BufferedImage resizedBgTitle = new BufferedImage(2*gp.screenWidth, gp.screenHeight, bgTitle.getType());
-            Graphics2D gBgTitle = resizedBgTitle.createGraphics();
-            gBgTitle.drawImage(bgTitle, 0, 0, 2*gp.screenWidth, gp.screenHeight, null);
-            this.bgTitle = resizedBgTitle;
+            this.bg = ImageIO.read(getClass().getResourceAsStream("/state/title/background.png"));
+            BufferedImage resizedBg = new BufferedImage(2*gp.screenWidth, gp.screenHeight, bg.getType());
+            Graphics2D g = resizedBg.createGraphics();
+            g.drawImage(bg, 0, 0, 2*gp.screenWidth, gp.screenHeight, null);
+            this.bg = resizedBg;
+            g.dispose();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -50,8 +56,8 @@ public class TitleState extends State {
 
     @Override
     public void draw(Graphics2D g) {
-        g.drawImage(bgTitle, bgTitleScreenX, 0 , null);
-        if (bgTitleScreenX-- < -gp.screenWidth) bgTitleScreenX = 0;
+        g.drawImage(bg, bgScreenX, 0 , null);
+        if (bgScreenX-- < -gp.screenWidth) bgScreenX = 0;
 
         g.setFont(g.getFont().deriveFont(Font.BOLD, 128F));
         String text = "HELLSCAPE";
@@ -62,5 +68,9 @@ public class TitleState extends State {
         playButton.draw(g);
         quitButton.draw(g);
         playerIcon.draw(g);
+    }
+
+    public void reset() {
+        this.playerIcon = new Player(gp);
     }
 }

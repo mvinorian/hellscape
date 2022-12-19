@@ -30,11 +30,6 @@ public class MiniMap implements Drawable {
         this.playerWorldRow = gp.player.cBox.getY()/gp.tileSize;
     }
 
-    public void reset() {
-        this.playerWorldCol = gp.player.cBox.getX()/gp.tileSize;
-        this.playerWorldRow = gp.player.cBox.getY()/gp.tileSize;
-    }
-
     @Override
     public void draw(Graphics2D g) {
         g.setColor(Color.WHITE);
@@ -51,13 +46,16 @@ public class MiniMap implements Drawable {
             screenY+playerWorldRow*unit, 
             unit, unit
         );
+    }
+    
+    public void set() {
+        this.playerWorldCol = gp.player.cBox.getX()/gp.tileSize;
+        this.playerWorldRow = gp.player.cBox.getY()/gp.tileSize;
+    }
 
-        // String floor = String.format("%d / %d F", gp.world.floorCount, gp.world.maxFloor);
-        // g.setColor(Color.WHITE);
-        // g.setFont(g.getFont().deriveFont(Font.BOLD, 24F));
-        // g.drawString(floor, 
-        //     screenX+gp.world.maxWorldCol*unit/2
-        //         -(int)g.getFontMetrics().getStringBounds(floor, g).getWidth()/2, 
-        //     screenY+gp.world.maxWorldRow*unit+30);
+    public void reset() {
+        this.playerWorldCol = gp.player.cBox.getX()/gp.tileSize;
+        this.playerWorldRow = gp.player.cBox.getY()/gp.tileSize;
+        gp.foreground.add(this);
     }
 }

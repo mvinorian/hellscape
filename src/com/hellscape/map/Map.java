@@ -34,7 +34,7 @@ public class Map implements Drawable {
 
     public List<Point> rooms;
     public List<Entity> enemies;
-    public int floorCount = 0;
+    public int floorCount = 1;
     public Door door;
 
     public Map(GamePanel gp) {
@@ -109,7 +109,6 @@ public class Map implements Drawable {
         this.worldStart = rm.getStart();
         this.worldEnd = rm.getEnd();
         this.rooms = rm.getRooms();
-        this.floorCount++;
         if (this.door == null) this.door = new Door(gp);
         else this.door.reset();
     }
@@ -119,6 +118,10 @@ public class Map implements Drawable {
             room.scale(gp.tileSize, gp.tileSize);
             this.enemies.add(new Slime(gp, room.x, room.y));
         }
+    }
+
+    public void reset() {
+        this.enemies.clear();
     }
 
     private void loadSprite(String path) {

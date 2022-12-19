@@ -38,6 +38,10 @@ public class UI implements Drawable {
                 states[GamePanel.titleState].update();
                 break;
             }
+            case GamePanel.pauseState: {
+                states[GamePanel.pauseState].update();
+                break;
+            }
         }
     }
 
@@ -66,5 +70,9 @@ public class UI implements Drawable {
                 break;
             }
         }
+    }
+
+    public void reset() {
+        this.states[GamePanel.titleState].reset();
     }
 }

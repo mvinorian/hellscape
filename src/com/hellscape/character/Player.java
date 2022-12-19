@@ -73,10 +73,31 @@ public class Player extends Entity {
         this.life -= attack;
     }
 
-    public void move(int worldX, int worldY) {
-        this.worldX = worldX;
-        this.worldY = worldY;
+    public void setPosition() {
+        this.worldX = gp.world.worldStart.x*gp.tileSize;
+        this.worldY = gp.world.worldStart.y*gp.tileSize;
         this.cBox = new Box(worldX, worldY, gp.tileSize, gp.tileSize);
         this.cBox.setPadding(3*gp.tileSize/4, gp.tileSize/4, 0, gp.tileSize/4);
+    }
+
+    public void reset() {
+        this.frameCount = 0;
+        this.state = idleState;
+        this.direction = faceRight;
+        
+        this.worldX = gp.world.worldStart.x*gp.tileSize;
+        this.worldY = gp.world.worldStart.y*gp.tileSize;
+        this.speed = 2;
+
+        this.cBox = new Box(worldX, worldY, gp.tileSize, gp.tileSize);
+        this.cBox.setPadding(3*gp.tileSize/4, gp.tileSize/4, 0, gp.tileSize/4);
+
+        this.maxLife = 100;
+        this.life = maxLife;
+
+        this.isMovingUp = false;
+        this.isMovingDown = false;
+        this.isMovingLeft = false;
+        this.isMovingRight = false;
     }
 }

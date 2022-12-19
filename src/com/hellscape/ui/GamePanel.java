@@ -48,12 +48,11 @@ public class GamePanel extends JPanel implements Runnable {
     public List<Drawable> foreground;
 
     public GamePanel() {
-        this.enemies = new ArrayList<Entity>();
-        this.background = new ArrayList<Drawable>();
-        this.foreground = new ArrayList<Drawable>();
-
-        this.setupGame();
         this.setPreferredSize(new Dimension(screenWidth , screenHeight));
+        this.setupGame();
+
+        this.keyH = new KeyHandler(this);
+        this.mouseH = new MouseHandler(this);
         this.addKeyListener(keyH);
         this.addMouseListener(mouseH);
         this.addMouseMotionListener(mouseH);
@@ -61,9 +60,11 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
     }
     
-    public void setupGame() {
-        this.keyH = new KeyHandler(this);
-        this.mouseH = new MouseHandler(this);
+    private void setupGame() {
+        this.enemies = new ArrayList<Entity>();
+        this.background = new ArrayList<Drawable>();
+        this.foreground = new ArrayList<Drawable>();
+
         this.world = new Map(this);
         this.world.generate();
         this.player = new Player(this);
@@ -98,17 +99,11 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        switch (gameState) {
-            case titleState: {
-                ui.update();
-                break;
-            }
-            case playState: {
-                this.player.update();
-                this.world.update();
-                this.miniMap.update();
-                break;
-            }
+        if (gameState != playState) this.ui.update();
+        else {
+            this.player.update();
+            this.world.update();
+            this.miniMap.update();
         }
     }
 
@@ -135,10 +130,24 @@ public class GamePanel extends JPanel implements Runnable {
         g2d.dispose();
     }
     
-    public void reset() {
+    public void nextFloor() {
         this.world.generate();
-        this.player.move(world.worldStart.x*tileSize, world.worldStart.y*tileSize);
+        this.player.setPosition();
+        this.world.generateEnemies();
+        this.miniMap.set();
+        this.world.floorCount++;
+    }
+
+    public void reset() {
+        this.enemies.clear();
+        this.background.clear();
+        this.foreground.clear();
+        this.world.reset();
+        this.world.generate();
+        this.player.reset();
         this.world.generateEnemies();
         this.miniMap.reset();
+        this.ui.reset();
+        this.gameState = titleState;
     }
 }

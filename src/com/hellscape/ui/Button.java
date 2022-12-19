@@ -52,7 +52,6 @@ public class Button implements Drawable {
 
     @Override
     public void draw(Graphics2D g) {
-        if (state == submitted) System.out.println("submitted");
         g.setStroke(new BasicStroke(3));
         g.setColor(shaderColor);
         g.drawRoundRect(screenX+2, screenY+2, width, height, 5, 5);

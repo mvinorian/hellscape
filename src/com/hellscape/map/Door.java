@@ -52,7 +52,7 @@ public class Door implements Drawable {
         this.updateZPos();
         if (state == open && gp.player.isCollide(cBox)) {
             if (gp.world.floorCount == gp.world.maxFloor) gp.gameState = GamePanel.endState;
-            else gp.reset();
+            else gp.nextFloor();
             return;
         }
         if (gp.world.enemies.isEmpty()) {

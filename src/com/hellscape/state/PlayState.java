@@ -25,9 +25,10 @@ public class PlayState extends State {
         try {
             this.heart = ImageIO.read(getClass().getResourceAsStream("/decoration/heart.png"));
             BufferedImage resizedHeart = new BufferedImage(gp.tileSize, gp.tileSize, heart.getType());
-            Graphics2D gHeart = resizedHeart.createGraphics();
-            gHeart.drawImage(heart, 0, 0, gp.tileSize, gp.tileSize, null);
+            Graphics2D g = resizedHeart.createGraphics();
+            g.drawImage(heart, 0, 0, gp.tileSize, gp.tileSize, null);
             this.heart = resizedHeart;
+            g.dispose();
         } catch (IOException e) {
             e.printStackTrace();
         }
