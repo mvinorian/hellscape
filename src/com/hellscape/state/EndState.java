@@ -57,8 +57,8 @@ public class EndState extends State {
 
         g.setColor(Color.WHITE);
         g.setFont(g.getFont().deriveFont(Font.BOLD, 80F));
-        String text1 = (gp.player.life == 0) ? "GAME" : "YOU";
-        String text2 = (gp.player.life == 0) ? "OVER" : "WIN";
+        String text1 = (gp.player.life <= 0) ? "GAME" : "YOU";
+        String text2 = (gp.player.life <= 0) ? "OVER" : "WIN";
         int x = (gp.screenWidth-getLength(g, text1))/2;
         int y = 7*gp.tileSize/4;
         drawShadedText(g, text1, x, y, 3, 3);

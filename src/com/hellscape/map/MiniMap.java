@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import com.hellscape.character.Entity;
 import com.hellscape.ui.Drawable;
 import com.hellscape.ui.GamePanel;
 
@@ -39,6 +40,16 @@ public class MiniMap implements Drawable {
         for (int row = 0; row < gp.world.maxWorldRow; row++) {
             if (gp.world.world[row][col].isPassable == false) continue;
             g.fillRect(screenX+col*unit, screenY+row*unit, unit, unit);
+        }
+        g.setColor(Color.RED);
+        for (Entity enemy : gp.world.enemies) {
+            int enemyWorldCol = enemy.cBox.getX()/gp.tileSize;
+            int enemyWorldRow = enemy.cBox.getY()/gp.tileSize;
+            g.fillRect(
+                screenX+enemyWorldCol*unit,
+                screenY+enemyWorldRow*unit,
+                unit, unit
+            );
         }
         g.setColor(Color.BLUE);
         g.fillRect(

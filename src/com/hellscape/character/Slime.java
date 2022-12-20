@@ -96,13 +96,15 @@ public class Slime extends Entity {
         int dX = gp.player.worldX - this.worldX;
         int dY = gp.player.worldY - this.worldY;
 
-        if (dX*dX + dY*dY < 10000) {
+        if (this.state == attackState && this.frameCount != 0) return false;
+
+        if (dX*dX + dY*dY < gp.tileSize*gp.tileSize) {
             if (this.state != attackState) this.frameCount = 0;
             this.state = attackState;
             return false;
         }
 
-        if (dX > 4*gp.tileSize || dY > 2*gp.tileSize) {
+        if (dX > gp.screenWidth/2 || dY > gp.screenHeight/2) {
             if (this.state != idleState) this.frameCount = 0;
             this.state = idleState;
             return false;
