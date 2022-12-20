@@ -20,13 +20,10 @@ public class Door implements Drawable {
     private final int maxType = 2;
     private final int closed = 0;
     private final int open = 1;
-    private final int background = 1;
-    private final int foreground = 2;
 
     private GamePanel gp;
     private int worldX, worldY;
     private int screenX, screenY;
-    private int zPos;
 
     public int state;
     public Box cBox;
@@ -44,13 +41,16 @@ public class Door implements Drawable {
         this.cBox.setPadding(3*height/4, width/4, height/16, width/4);
         
         this.state = closed;
+        gp.background.add(this);
+
         this.sprite = new BufferedImage[maxType];
         this.loadSprite("/decoration/door.png");
     }
 
     @Override
     public void update() {
-        this.updateZPos();
+        this.screenX = worldX - gp.player.worldX + gp.player.screenX;
+        this.screenY = worldY - gp.player.worldY + gp.player.screenY;
         if (state == open && gp.player.isCollide(cBox)) {
             if (gp.world.floorCount == gp.world.maxFloor) {
                 gp.gameState = GamePanel.endState;
@@ -81,21 +81,7 @@ public class Door implements Drawable {
         this.cBox = new Box(this.worldX, this.worldY, width, height);
         this.cBox.setPadding(3*height/4, width/4, height/16, width/4);
         this.state = closed;
-    }
-
-    private void updateZPos() {
-        this.screenX = worldX - gp.player.worldX + gp.player.screenX;
-        this.screenY = worldY - gp.player.worldY + gp.player.screenY;
-
-        if (this.cBox.getY() > gp.player.cBox.getY()) {
-            if (this.zPos != foreground) gp.foreground.add(0, this);
-            if (this.zPos == background) gp.background.remove(this);
-            this.zPos = foreground;
-        } else {
-            if (this.zPos != background) gp.background.add(this);
-            if (this.zPos == foreground) gp.foreground.remove(this);
-            this.zPos = background;
-        }
+        gp.background.add(this);
     }
     
     private void loadSprite(String path) {

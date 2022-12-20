@@ -135,11 +135,11 @@ public class GamePanel extends JPanel implements Runnable {
     }
     
     public void nextFloor() {
+        this.world.floorCount++;
         this.world.generate();
         this.player.setPosition();
         this.world.generateEnemies();
         this.miniMap.set();
-        this.world.floorCount++;
     }
 
     public void reset() {
